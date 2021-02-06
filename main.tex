@@ -1,0 +1,153 @@
+\documentclass[a4paper,12pt,twoside]{article}
+\usepackage{xcolor}
+\definecolor{verde}{rgb}{0,0.5,0}
+\definecolor{jpurple}{rgb}{0.5,0,0.35}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[brazilian]{babel}
+\usepackage{indentfirst}
+\usepackage{steinmetz}
+\usepackage{multicol}
+\usepackage[left=2cm, right=2cm, top=2cm]{geometry}
+\setlength\parindent{1cm}
+\usepackage{mathrsfs, amsmath}
+\usepackage{textcomp}
+\usepackage{gensymb}
+\usepackage{lipsum}
+\usepackage{natbib}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+
+% Definindo novas cores
+\definecolor{verde}{rgb}{0.25,0.5,0.35}
+\definecolor{jpurple}{rgb}{0.5,0,0.35}
+% Configurando layout para mostrar codigos Python
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{jpurple}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{verde},
+  morecomment=[s][\color{blue}]{/**}{*/},
+  extendedchars=true,
+  showspaces=false,
+  showstringspaces=false,
+  numbers=left,
+  numberstyle=\tiny,
+  breaklines=true,
+  backgroundcolor=\color{cyan!10},
+  breakautoindent=true,
+  captionpos=b,
+  xleftmargin=0pt,
+  tabsize=4
+}
+
+
+
+\headheight = 10pt
+
+\setcounter{section}{-1}
+
+
+
+\date{}
+
+\begin{document}
+
+% capa
+\begin{titlepage} %iniciando a "capa"
+\begin{center} %centralizar o texto abaixo
+{\large Universidade Federal do Rio de Janeiro}\\[0.2cm] %0,2cm é a distância entre o texto dessa linha e o texto da próxima
+{\large Escola Politécnica}\\[0.2cm] % o comando \\ "manda" o texto ir para próxima linha
+{\large Departamento de Engenharia Eletrônica e de Computação}\\[0.2cm]
+{\large Engenharia Eletrônica e de Computação}\\[0.2cm]
+{\large Álgebra Linear 2}\\[5.1cm]
+{\bf \huge TRABALHO DE}\\ % o comando \bf deixa o texto entre chaves em negrito. O comando \huge deixa o texto enorme
+{\bf \huge ÁLGEBRA LINEAR 2}\\[5.1cm] 
+\end{center} %término do comando centralizar
+{\large Aluna: Karen dos Anjos Arcoverde}\\[0.7cm] % o comando \large deixa o texto grande
+{\large Professor: Marcello Luiz Rodrigues de Campos}\\[5.1cm]
+\begin{center}
+{\large Rio de Janeiro}\\[0.2cm]
+{\large 2021}
+\end{center}
+\end{titlepage} %término da "capa"
+
+
+\renewcommand{\contentsname}{Sumário}
+
+\tableofcontents
+\clearpage
+
+
+
+
+
+\section{Introdução}
+\subsection{Conteúdo}
+    O relatório contém os resultados encontrados para cada questão passada pelo professor e o código final em linguagem Python.
+\subsection{Software e linguagem}
+    O software usado para programação foi o Spyder e a linguagem foi o Python 3.8.
+\subsection{Bibliotecas}
+As bibiotecas utilizadas para construir o código em Python foram:
+\begin{itemize}
+   \item Numpy
+   \item Scipy
+ \end{itemize}
+ \subsection{Base de dados}
+ O  conjunto de dados "Iris" selecionado para o trabalho foi:
+ \begin{table}[H]
+\begin{tabular}{|c|c|c|} \hline
+\textbf{ESPÉCIES} & DE & PARA \\\hline
+\textbf{Iris-setosa}  & 25 & 39 \\\hline
+\textbf{Iris-versicolor} & 75 & 89  \\\hline
+\textbf{Iris-virginica} & 125 & 139 \\\hline
+
+ 
+\end{tabular}
+\label{tabela2}
+\centering
+\caption{Base de dados "Iris" selecionada}
+\label {tabela2}
+\end{table}
+
+
+
+\section{Questão 1}
+\subsection{Resultado}
+
+\section{Questão 2}
+\subsection{Resultado}
+
+\section{Questão 3}
+\subsection{Resultado}
+
+
+\section{Questão 4}
+\subsection{Resultado}
+
+\section{Código}
+
+
+
+
+\section{Bibliografia}
+\begin{itemize}
+   \item https://algebralinearufcg.github.io/jup-not/prog02-learning-numpy.html
+   \item https://machinelearningmastery.com/singular-value-decomposition-for-machine-learning/
+ \end{itemize}
+
+
+
+
+\begin{lstlisting}
+
+
+			
+\end{lstlisting}
+
+\end{document}

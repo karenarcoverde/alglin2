@@ -164,7 +164,7 @@ def decomposicao_espectral(R):
     return  autovetores, matrizDiagonal
 
 # ----------------------------------------------------------
-def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica):
+def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):
     
    lista_erros = []
    estimativa = ""
@@ -177,7 +177,13 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica):
        amostra_x.append (amostra[indice])
        indice += 1
        
+   if (c_independente == True):
+       amostra_x.append(1)
+   
+       
+       
    amostra_x = np.array(amostra_x)
+   
 
    #produto interno <x,y> = (x^T).y
    
@@ -400,6 +406,7 @@ def menu():
             D = [6.1,3.0,4.6,1.4]
             E = [5.9,3.0,5.1,1.8]
             
+            print("SEM O TERMO INDEPENDENTE: ")
             dados = pegarDados ('1')
             R,p,R1,p1 = construir_equacao_normal(dados)
             w_setosa = PLU(R,p)
@@ -412,16 +419,44 @@ def menu():
             R,p,R1,p1 = construir_equacao_normal(dados)
             w_virginica = PLU(R,p)
             
-            estimativa = estimar_amostras(A,w_setosa,w_versicolor,w_virginica)
+            c_independente = False
+            estimativa = estimar_amostras(A,w_setosa,w_versicolor,w_virginica,c_independente)
             print("A = ", estimativa)
-            estimativa = estimar_amostras(B,w_setosa,w_versicolor,w_virginica)
+            estimativa = estimar_amostras(B,w_setosa,w_versicolor,w_virginica,c_independente)
             print("B = ", estimativa)
-            estimativa = estimar_amostras(C,w_setosa,w_versicolor,w_virginica)
+            estimativa = estimar_amostras(C,w_setosa,w_versicolor,w_virginica,c_independente)
             print("C = ", estimativa)
-            estimativa = estimar_amostras(D,w_setosa,w_versicolor,w_virginica)
+            estimativa = estimar_amostras(D,w_setosa,w_versicolor,w_virginica,c_independente)
             print("D = ", estimativa)
-            estimativa = estimar_amostras(E,w_setosa,w_versicolor,w_virginica)
+            estimativa = estimar_amostras(E,w_setosa,w_versicolor,w_virginica,c_independente)
             print("E = ", estimativa)
+            
+            print()
+            print("COM O TERMO INDEPENDENTE: ")
+            dados = pegarDados ('1')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w1_setosa = PLU(R1,p1)
+            
+            dados = pegarDados ('2')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w1_versicolor = PLU(R1,p1)
+            
+            dados = pegarDados ('3')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w1_virginica = PLU(R1,p1)
+            
+            c_independente = True
+            estimativa1 = estimar_amostras(A,w1_setosa,w1_versicolor,w1_virginica,c_independente)
+            print("A = ", estimativa1)
+            estimativa1 = estimar_amostras(B,w1_setosa,w1_versicolor,w1_virginica,c_independente)
+            print("B = ", estimativa1)
+            estimativa1 = estimar_amostras(C,w1_setosa,w1_versicolor,w1_virginica,c_independente)
+            print("C = ", estimativa1)
+            estimativa1 = estimar_amostras(D,w1_setosa,w1_versicolor,w1_virginica,c_independente)
+            print("D = ", estimativa1)
+            estimativa1 = estimar_amostras(E,w1_setosa,w1_versicolor,w1_virginica,c_independente)
+            print("E = ", estimativa1)
+            
             
     
     

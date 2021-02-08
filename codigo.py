@@ -5,7 +5,8 @@
 
 
 import numpy as np
-from scipy.linalg import svd
+from scipy import linalg
+from scipy.linalg import diagsvd
 
 
 ############################# Funcoes #############################
@@ -160,7 +161,7 @@ def decomposicao_espectral(R):
     autovalores, autovetores = np.linalg.eig(R) 
     # matriz diagonal de autovalores
     matrizDiagonal = np.diag(autovalores) 
-    
+      
     return  autovetores, matrizDiagonal
 
 # ----------------------------------------------------------
@@ -364,8 +365,8 @@ def menu():
                 
                dados = pegarDados (tipo_iris)
                R,p,R1,p1 = construir_equacao_normal(dados)
-               U, s, VT = svd(R)
-               U1, s1, VT1 = svd(R1)
+               U, s, VT = linalg.svd(R)
+               U1, s1, VT1 = linalg.svd(R1)
                
                if  (tipo_iris == '1'):
                     print("Iris-Setosa\n")
@@ -380,19 +381,19 @@ def menu():
                print("SEM O TERMO INDEPENDENTE: ")
                print("U = ", U)
                print()
-               print('\u03A3 = ', s)
+               print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
                print()
                print("V^T = ", VT)
-                
                print()
                print()
                 
                print("COM O TERMO INDEPENDENTE: ")
                print("U = ", U1)
                print()
-               print('\u03A3 = ', s1)
+               print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))
                print()
                print("V^T = ", VT1)
+               
                 
         if (resultado == '4'):
             A = [5.0,2.3,3.3,1.0]

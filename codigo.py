@@ -178,22 +178,12 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica):
        indice += 1
        
    amostra_x = np.array(amostra_x)
-   
-   print(amostra_x)
-   print(amostra[3])
-   print(w_setosa)
-   print(w_versicolor)
-   print(w_virginica)
 
    #produto interno <x,y> = (x^T).y
    
    estimativa_setosa = np.dot(amostra_x,w_setosa)
    estimativa_versicolor = np.dot(amostra_x,w_versicolor)
    estimativa_virginica = np.dot(amostra_x,w_virginica)
-   
-   print(estimativa_setosa)
-   print(estimativa_versicolor)
-   print(estimativa_virginica) 
    
    erro_setosa = estimativa_setosa[0] - amostra[3]
    lista_erros.append(erro_setosa)
@@ -204,14 +194,10 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica):
    erro_virginica = estimativa_virginica[0] - amostra[3]
    lista_erros.append(erro_virginica)
    
-   print(lista_erros)
    
    while (indice_erros_modulo < len(lista_erros)):
        lista_erros [indice_erros_modulo] = abs(lista_erros[indice_erros_modulo])
        indice_erros_modulo += 1
-   
-   print(lista_erros)
-   print(min(lista_erros))
    
    if (min(lista_erros) == abs(erro_setosa)):
        estimativa = "Iris-Setosa"

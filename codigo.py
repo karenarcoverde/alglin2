@@ -146,30 +146,22 @@ def PLU(R,p):
             p = np.dot (P,p)
        
         indice_coluna += 1 
-        
+    
     #backsubstitution
     w = np.linalg.solve(R, p)
       
     return w
            
 # ----------------------------------------------------------
-def decomposicao_espectral(R,R1):
+def decomposicao_espectral(R):
     
-    ############ matriz R - sem o termo independente ###############
     # R = VDV^(T)
     #determinando autovalores e autovetores
     autovalores, autovetores = np.linalg.eig(R) 
     # matriz diagonal de autovalores
     matrizDiagonal = np.diag(autovalores) 
-
-    ############# matriz R1 - com o termo independente ############# 
-    # R1 = VDV^(T)
-    #determinando autovalores e autovetores
-    autovalores1, autovetores1 = np.linalg.eig(R1) 
-    # matriz diagonal de autovalores
-    matrizDiagonal1 = np.diag(autovalores) 
     
-    return  autovetores, matrizDiagonal, autovetores1, matrizDiagonal1
+    return  autovetores, matrizDiagonal
 
 ################### Programa Principal ###################
 def menu():
@@ -270,7 +262,8 @@ def menu():
            
                 dados = pegarDados (tipo_iris)
                 R,p,R1,p1 = construir_equacao_normal(dados)
-                autovetores, matrizDiagonal,autovetores1,matrizDiagonal1 = decomposicao_espectral(R,R1)
+                autovetores, matrizDiagonal = decomposicao_espectral(R)
+                autovetores1, matrizDiagonal1 = decomposicao_espectral(R1)
                 
                 if  (tipo_iris == '1'):
                     print("Iris-Setosa\n")
@@ -278,6 +271,9 @@ def menu():
                     print("Iris-Versicolor\n")
                 elif (tipo_iris == '3'):
                     print("Iris-Virginica\n")
+                
+                print("R = V\u039BV^(T)")
+                print()
                 
                 print("SEM O TERMO INDEPENDENTE: ")
                 print("V = ",autovetores)
@@ -317,7 +313,7 @@ def menu():
                dados = pegarDados (tipo_iris)
                R,p,R1,p1 = construir_equacao_normal(dados)
                U, s, VT = svd(R)
-               U, s, VT = svd(R1)
+               U1, s1, VT1 = svd(R1)
                
                if  (tipo_iris == '1'):
                     print("Iris-Setosa\n")
@@ -325,6 +321,9 @@ def menu():
                     print("Iris-Versicolor\n")
                elif (tipo_iris == '3'):
                     print("Iris-Virginica\n")
+                    
+               print("R = U\u03A3V^(T)")
+               print()
                
                print("SEM O TERMO INDEPENDENTE: ")
                print("U = ", U)
@@ -337,11 +336,11 @@ def menu():
                print()
                 
                print("COM O TERMO INDEPENDENTE: ")
-               print("U = ", U)
+               print("U = ", U1)
                print()
-               print('\u03A3 = ', s)
+               print('\u03A3 = ', s1)
                print()
-               print("V^T = ", VT)
+               print("V^T = ", VT1)
                 
         if (resultado == '4'):
             print("ok2")

@@ -163,6 +163,71 @@ def decomposicao_espectral(R):
     
     return  autovetores, matrizDiagonal
 
+# ----------------------------------------------------------
+def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica):
+    
+   lista_erros = []
+   estimativa = ""
+   indice = 0
+   amostra_x = []
+   indice_erros_modulo = 0
+   
+   
+   while (indice < 3):
+       amostra_x.append (amostra[indice])
+       indice += 1
+       
+   amostra_x = np.array(amostra_x)
+   
+   print(amostra_x)
+   print(amostra[3])
+   print(w_setosa)
+   print(w_versicolor)
+   print(w_virginica)
+
+   #produto interno <x,y> = (x^T).y
+   
+   estimativa_setosa = np.dot(amostra_x,w_setosa)
+   estimativa_versicolor = np.dot(amostra_x,w_versicolor)
+   estimativa_virginica = np.dot(amostra_x,w_virginica)
+   
+   print(estimativa_setosa)
+   print(estimativa_versicolor)
+   print(estimativa_virginica) 
+   
+   erro_setosa = estimativa_setosa[0] - amostra[3]
+   lista_erros.append(erro_setosa)
+   
+   erro_versicolor = estimativa_versicolor[0] - amostra[3]
+   lista_erros.append(erro_versicolor)
+   
+   erro_virginica = estimativa_virginica[0] - amostra[3]
+   lista_erros.append(erro_virginica)
+   
+   print(lista_erros)
+   
+   while (indice_erros_modulo < len(lista_erros)):
+       lista_erros [indice_erros_modulo] = abs(lista_erros[indice_erros_modulo])
+       indice_erros_modulo += 1
+   
+   print(lista_erros)
+   print(min(lista_erros))
+   
+   if (min(lista_erros) == abs(erro_setosa)):
+       estimativa = "Iris-Setosa"
+       
+       return estimativa
+   
+   if (min(lista_erros) == abs(erro_versicolor)):
+       estimativa = "Iris-Versicolor"
+       
+       return estimativa
+   
+   if (min(lista_erros) == abs(erro_virginica)):
+       estimativa = "Iris-Virginica"
+       
+       return estimativa
+    
 ################### Programa Principal ###################
 def menu():
     resultado = ""
@@ -343,7 +408,35 @@ def menu():
                print("V^T = ", VT1)
                 
         if (resultado == '4'):
-            print("ok2")
+            A = [5.0,2.3,3.3,1.0]
+            B = [4.6,3.2,1.4,0.2]
+            C = [5.0,3.3,1.4,0.2]
+            D = [6.1,3.0,4.6,1.4]
+            E = [5.9,3.0,5.1,1.8]
+            
+            dados = pegarDados ('1')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w_setosa = PLU(R,p)
+            
+            dados = pegarDados ('2')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w_versicolor = PLU(R,p)
+            
+            dados = pegarDados ('3')
+            R,p,R1,p1 = construir_equacao_normal(dados)
+            w_virginica = PLU(R,p)
+            
+            estimativa = estimar_amostras(A,w_setosa,w_versicolor,w_virginica)
+            print("A = ", estimativa)
+            estimativa = estimar_amostras(B,w_setosa,w_versicolor,w_virginica)
+            print("B = ", estimativa)
+            estimativa = estimar_amostras(C,w_setosa,w_versicolor,w_virginica)
+            print("C = ", estimativa)
+            estimativa = estimar_amostras(D,w_setosa,w_versicolor,w_virginica)
+            print("D = ", estimativa)
+            estimativa = estimar_amostras(E,w_setosa,w_versicolor,w_virginica)
+            print("E = ", estimativa)
+            
     
     
 ######## chamada ao menu

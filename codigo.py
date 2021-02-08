@@ -172,19 +172,15 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):
    amostra_x = []
    indice_erros_modulo = 0
    
-   
    while (indice < 3):
        amostra_x.append (amostra[indice])
        indice += 1
        
    if (c_independente == True):
        amostra_x.append(1)
-   
-       
-       
+      
    amostra_x = np.array(amostra_x)
    
-
    #produto interno <x,y> = (x^T).y
    
    estimativa_setosa = np.dot(amostra_x,w_setosa)
@@ -199,7 +195,6 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):
    
    erro_virginica = estimativa_virginica[0] - amostra[3]
    lista_erros.append(erro_virginica)
-   
    
    while (indice_erros_modulo < len(lista_erros)):
        lista_erros [indice_erros_modulo] = abs(lista_erros[indice_erros_modulo])
@@ -457,8 +452,5 @@ def menu():
             estimativa1 = estimar_amostras(E,w1_setosa,w1_versicolor,w1_virginica,c_independente)
             print("E = ", estimativa1)
             
-            
-    
-    
 ######## chamada ao menu
 menu()

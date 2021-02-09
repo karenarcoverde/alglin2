@@ -7,6 +7,8 @@
 import numpy as np
 from scipy import linalg
 from scipy.linalg import diagsvd
+import sys
+
 
 
 ############################# Funcoes #############################
@@ -24,11 +26,11 @@ def pegarDados(tipo_iris):
     arquivo= open("dados_13.csv",'r')
     arquivo.readline() # ignora a primeira linha
     
-    if (tipo_iris == '1'):
+    if (tipo_iris == 1):
         IDs = Setosa
-    if (tipo_iris == '2'):
+    if (tipo_iris == 2):
         IDs = Versicolor
-    if (tipo_iris == '3'):
+    if (tipo_iris == 3):
         IDs = Virginica
         
     for i in range(1,46): # percorre todo o banco de dados 1-45
@@ -218,14 +220,13 @@ def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):
     
 ################### Programa Principal ###################
 def menu():
-    resultado = ""
-    tipo_iris = ""
+    resultado = 0
+    tipo_iris = 0
     coeficientes_sem_aux = []
     coeficientes_com_aux = []
     indice = 0
     
-    
-    while (resultado != '5'):    
+    while (resultado != 5):    
         print()
         print('##################### MENU PRINCIPAL ##############################')
         print("Digite somente o numero da questao que voce deseja ver o resultado: ")
@@ -237,15 +238,14 @@ def menu():
         print('###################################################################')
         print()
         
-        resultado = input()
+        resultado = int(input())
         
-        if (resultado == '5'):
-            break
-        
+        if (resultado == 5):
+            sys.exit(0)
     
-        if (resultado == '1'):
+        if (resultado == 1):
             
-            while (tipo_iris != '4'):
+            while (tipo_iris != 4):
                 print('##################### MENU IRIS #########################')
                 print("Digite qual especie voce deseja fazer a regressao linear: ")
                 print("1 = Iris-Setosa")
@@ -255,9 +255,9 @@ def menu():
                 print('#########################################################')
                 print()
              
-                tipo_iris = input()
+                tipo_iris = int(input())
                 
-                if (tipo_iris == '4'):
+                if (tipo_iris == 4):
                    menu()
                    
                 else:
@@ -267,11 +267,11 @@ def menu():
                     w1 = PLU(R1,p1)
                               
                     print()
-                    if  (tipo_iris == '1'):
+                    if  (tipo_iris == 1):
                         print("Iris-Setosa\n")
-                    elif (tipo_iris == '2'):
+                    elif (tipo_iris == 2):
                         print("Iris-Versicolor\n")
-                    elif (tipo_iris == '3'):
+                    elif (tipo_iris == 3):
                         print("Iris-Virginica\n")
                         
                     print("SEM O TERMO INDEPENDENTE: ")
@@ -306,9 +306,9 @@ def menu():
                    
                     print()
     
-        if (resultado == '2'):
+        if (resultado == 2):
             
-            while (tipo_iris != '4'):
+            while (tipo_iris != 4):
                 print('##################### MENU IRIS ###############################')
                 print("Digite qual especie voce deseja fazer a decomposicao espectral: ")
                 print("1 = Iris-Setosa")
@@ -319,9 +319,9 @@ def menu():
                 print()
              
              
-                tipo_iris = input()
+                tipo_iris = int(input())
                 
-                if (tipo_iris == '4'):
+                if (tipo_iris == 4):
                    menu()
                    
                 else:
@@ -330,11 +330,11 @@ def menu():
                     autovetores, matrizDiagonal = decomposicao_espectral(R)
                     autovetores1, matrizDiagonal1 = decomposicao_espectral(R1)
                     
-                    if  (tipo_iris == '1'):
+                    if  (tipo_iris == 1):
                         print("Iris-Setosa\n")
-                    elif (tipo_iris == '2'):
+                    elif (tipo_iris == 2):
                         print("Iris-Versicolor\n")
-                    elif (tipo_iris == '3'):
+                    elif (tipo_iris == 3):
                         print("Iris-Virginica\n")
                     
                     print("R = V\u039BV^(T)")
@@ -359,9 +359,9 @@ def menu():
                     
                     print()
         
-        if (resultado == '3'):
+        if (resultado == 3):
              
-           while (tipo_iris != '4'):
+           while (tipo_iris != 4):
                print('##################### MENU IRIS #############')
                print("Digite qual especie voce deseja fazer o SVD: ")
                print("1 = Iris-Setosa")
@@ -371,9 +371,9 @@ def menu():
                print('#############################################')
                print()
              
-               tipo_iris = input()
-               
-               if (tipo_iris == '4'):
+               tipo_iris = int(input())
+              
+               if (tipo_iris == 4):
                    menu()
                
                else:
@@ -383,11 +383,11 @@ def menu():
                    U, s, VT = linalg.svd(R)
                    U1, s1, VT1 = linalg.svd(R1)
                    
-                   if  (tipo_iris == '1'):
+                   if  (tipo_iris == 1):
                         print("Iris-Setosa\n")
-                   elif (tipo_iris == '2'):
+                   elif (tipo_iris == 2):
                         print("Iris-Versicolor\n")
-                   elif (tipo_iris == '3'):
+                   elif (tipo_iris == 3):
                         print("Iris-Virginica\n")
                         
                    print("R = U\u03A3V^(T)")
@@ -413,7 +413,7 @@ def menu():
                    
                
                 
-        if (resultado == '4'):
+        if (resultado == 4):
             A = [5.0,2.3,3.3,1.0]
             B = [4.6,3.2,1.4,0.2]
             C = [5.0,3.3,1.4,0.2]
@@ -421,15 +421,15 @@ def menu():
             E = [5.9,3.0,5.1,1.8]
             
             print("SEM O TERMO INDEPENDENTE: ")
-            dados = pegarDados ('1')
+            dados = pegarDados (1)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w_setosa = PLU(R,p)
             
-            dados = pegarDados ('2')
+            dados = pegarDados (2)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w_versicolor = PLU(R,p)
-            
-            dados = pegarDados ('3')
+        
+            dados = pegarDados (3)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w_virginica = PLU(R,p)
             
@@ -447,15 +447,15 @@ def menu():
             
             print()
             print("COM O TERMO INDEPENDENTE: ")
-            dados = pegarDados ('1')
+            dados = pegarDados (1)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w1_setosa = PLU(R1,p1)
             
-            dados = pegarDados ('2')
+            dados = pegarDados (2)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w1_versicolor = PLU(R1,p1)
             
-            dados = pegarDados ('3')
+            dados = pegarDados (3)
             R,p,R1,p1 = construir_equacao_normal(dados)
             w1_virginica = PLU(R1,p1)
             

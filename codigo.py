@@ -226,6 +226,7 @@ def menu():
     coeficientes_com_aux = []
     indice = 0
     
+    
     while (resultado != 5):    
         print()
         print('##################### MENU PRINCIPAL ##############################')
@@ -315,7 +316,7 @@ def menu():
                 print("2 = Iris-Versicolor")
                 print("3 = Iris Virginica")
                 print("4 = VOLTAR AO MENU PRINCIPAL")
-                print('##############################################################')
+                print('###########################################################')
                 print()
              
              

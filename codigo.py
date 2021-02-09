@@ -224,175 +224,193 @@ def menu():
     coeficientes_com_aux = []
     indice = 0
     
-    print()
-    print("Digite somente o numero da questao que voce deseja ver o resultado: ")
-    print("Questao 1")
-    print("Questao 2")
-    print("Questao 3")
-    print("Questao 4")
-    print()
-    print("PARA SAIR DIGITE 0")
     
-    while (resultado != '0'):
+    while (resultado != '5'):    
+        print()
+        print('##################### MENU PRINCIPAL ##############################')
+        print("Digite somente o numero da questao que voce deseja ver o resultado: ")
+        print("1 = Questao 1")
+        print("2 = Questao 2")
+        print("3 = Questao 3")
+        print("4 = Questao 4")
+        print("5 = SAIR")
+        print('###################################################################')
+        print()
+        
         resultado = input()
+        
+        if (resultado == '5'):
+            break
+        
     
         if (resultado == '1'):
-            print("Digite qual especie voce deseja fazer a regressao linear: ")
-            print("1 = Iris-Setosa")
-            print("2 = Iris-Versicolor")
-            print("3 = Iris Virginica")
-            print()
-            print("PARA SAIR DIGITE 0")
             
-            while (tipo_iris != '0'):
+            while (tipo_iris != '4'):
+                print('##################### MENU IRIS #########################')
+                print("Digite qual especie voce deseja fazer a regressao linear: ")
+                print("1 = Iris-Setosa")
+                print("2 = Iris-Versicolor")
+                print("3 = Iris Virginica")
+                print("4 = VOLTAR AO MENU PRINCIPAL")
+                print('#########################################################')
+                print()
              
                 tipo_iris = input()
                 
-                if (tipo_iris == '0'):
-                    break
-           
-                dados = pegarDados (tipo_iris)
-                R,p,R1,p1 = construir_equacao_normal(dados)
-                w = PLU(R,p)
-                w1 = PLU(R1,p1)
-                          
-                print()
-                if  (tipo_iris == '1'):
-                    print("Iris-Setosa\n")
-                elif (tipo_iris == '2'):
-                    print("Iris-Versicolor\n")
-                elif (tipo_iris == '3'):
-                    print("Iris-Virginica\n")
+                if (tipo_iris == '4'):
+                   menu()
+                   
+                else:
+                    dados = pegarDados (tipo_iris)
+                    R,p,R1,p1 = construir_equacao_normal(dados)
+                    w = PLU(R,p)
+                    w1 = PLU(R1,p1)
+                              
+                    print()
+                    if  (tipo_iris == '1'):
+                        print("Iris-Setosa\n")
+                    elif (tipo_iris == '2'):
+                        print("Iris-Versicolor\n")
+                    elif (tipo_iris == '3'):
+                        print("Iris-Virginica\n")
+                        
+                    print("SEM O TERMO INDEPENDENTE: ")
+                    print("y = a*x1 + b*x2 + c*x3")
+                    print("[a b c] = ",end="")
                     
-                print("SEM O TERMO INDEPENDENTE: ")
-                print("y = a*x1 + b*x2 + c*x3")
-                print("[a b c] = ",end="")
-                
-                
-                while (indice < len(w)):
-                    coeficientes_sem_aux.append(w[indice][0])
-                    coeficientes_sem = np.array(coeficientes_sem_aux)
-                    indice += 1
-                
-                print(coeficientes_sem)
-                coeficientes_sem_aux = []
-                
                     
-                print()
-                
-                print("COM O TERMO INDEPENDENTE: ")
-                print("y = a*x1 + b*x2 + c*x3 + k")
-                print("[a b c k] = ",end="")
-                
-                indice = 0
-                while (indice < len(w1)):
-                    coeficientes_com_aux.append(w1[indice][0])
-                    coeficientes_com = np.array(coeficientes_com_aux)
-                    indice += 1
-                
-                print(coeficientes_com)
-                coeficientes_com_aux = []  
-                indice = 0
-               
-            
+                    while (indice < len(w)):
+                        coeficientes_sem_aux.append(w[indice][0])
+                        coeficientes_sem = np.array(coeficientes_sem_aux)
+                        indice += 1
+                    
+                    print(coeficientes_sem)
+                    coeficientes_sem_aux = []
+                    
+                        
+                    print()
+                    
+                    print("COM O TERMO INDEPENDENTE: ")
+                    print("y = a*x1 + b*x2 + c*x3 + k")
+                    print("[a b c k] = ",end="")
+                    
+                    indice = 0
+                    while (indice < len(w1)):
+                        coeficientes_com_aux.append(w1[indice][0])
+                        coeficientes_com = np.array(coeficientes_com_aux)
+                        indice += 1
+                    
+                    print(coeficientes_com)
+                    coeficientes_com_aux = []  
+                    indice = 0
+                   
+                    print()
     
         if (resultado == '2'):
-            print("Digite qual especie voce deseja fazer a decomposicao espectral: ")
-            print("1 = Iris-Setosa")
-            print("2 = Iris-Versicolor")
-            print("3 = Iris Virginica")
-            print()
-            print("PARA SAIR DIGITE 0")
             
-            while (tipo_iris != '0'):
+            while (tipo_iris != '4'):
+                print('##################### MENU IRIS ###############################')
+                print("Digite qual especie voce deseja fazer a decomposicao espectral: ")
+                print("1 = Iris-Setosa")
+                print("2 = Iris-Versicolor")
+                print("3 = Iris Virginica")
+                print("4 = VOLTAR AO MENU PRINCIPAL")
+                print('##############################################################')
+                print()
+             
              
                 tipo_iris = input()
                 
-                if (tipo_iris == '0'):
-                    break
+                if (tipo_iris == '4'):
+                   menu()
+                   
+                else:
+                    dados = pegarDados (tipo_iris)
+                    R,p,R1,p1 = construir_equacao_normal(dados)
+                    autovetores, matrizDiagonal = decomposicao_espectral(R)
+                    autovetores1, matrizDiagonal1 = decomposicao_espectral(R1)
                     
-                print()
-           
-                dados = pegarDados (tipo_iris)
-                R,p,R1,p1 = construir_equacao_normal(dados)
-                autovetores, matrizDiagonal = decomposicao_espectral(R)
-                autovetores1, matrizDiagonal1 = decomposicao_espectral(R1)
-                
-                if  (tipo_iris == '1'):
-                    print("Iris-Setosa\n")
-                elif (tipo_iris == '2'):
-                    print("Iris-Versicolor\n")
-                elif (tipo_iris == '3'):
-                    print("Iris-Virginica\n")
-                
-                print("R = V\u039BV^(T)")
-                print()
-                
-                print("SEM O TERMO INDEPENDENTE: ")
-                print("V = ",autovetores)
-                print()
-                print('\u039B = ',matrizDiagonal)
-                print()
-                print("V^T = ",np.transpose(autovetores))
-                
-                print()
-                print()
-                
-                print("COM O TERMO INDEPENDENTE: ")
-                print("V = ", autovetores1)
-                print()
-                print('\u039B = ', matrizDiagonal1)
-                print()
-                print("V^T = ", np.transpose(autovetores1))
-                
-        
+                    if  (tipo_iris == '1'):
+                        print("Iris-Setosa\n")
+                    elif (tipo_iris == '2'):
+                        print("Iris-Versicolor\n")
+                    elif (tipo_iris == '3'):
+                        print("Iris-Virginica\n")
+                    
+                    print("R = V\u039BV^(T)")
+                    print()
+                    
+                    print("SEM O TERMO INDEPENDENTE: ")
+                    print("V = ",autovetores)
+                    print()
+                    print('\u039B = ',matrizDiagonal)
+                    print()
+                    print("V^T = ",np.transpose(autovetores))
+                    
+                    print()
+                    print()
+                    
+                    print("COM O TERMO INDEPENDENTE: ")
+                    print("V = ", autovetores1)
+                    print()
+                    print('\u039B = ', matrizDiagonal1)
+                    print()
+                    print("V^T = ", np.transpose(autovetores1))
+                    
+                    print()
         
         if (resultado == '3'):
-           print("Digite qual especie voce deseja fazer o SVD: ")
-           print("1 = Iris-Setosa")
-           print("2 = Iris-Versicolor")
-           print("3 = Iris Virginica")
-           print()
-           print("PARA SAIR DIGITE 0")
-            
-           while (tipo_iris != '0'):        
+             
+           while (tipo_iris != '4'):
+               print('##################### MENU IRIS #############')
+               print("Digite qual especie voce deseja fazer o SVD: ")
+               print("1 = Iris-Setosa")
+               print("2 = Iris-Versicolor")
+               print("3 = Iris Virginica")
+               print("4 = VOLTAR AO MENU PRINCIPAL")
+               print('#############################################')
+               print()
+             
                tipo_iris = input()
-                
-               if (tipo_iris == '0'):
-                   break
-                    
-               print()
-                
-               dados = pegarDados (tipo_iris)
-               R,p,R1,p1 = construir_equacao_normal(dados)
-               U, s, VT = linalg.svd(R)
-               U1, s1, VT1 = linalg.svd(R1)
                
-               if  (tipo_iris == '1'):
-                    print("Iris-Setosa\n")
-               elif (tipo_iris == '2'):
-                    print("Iris-Versicolor\n")
-               elif (tipo_iris == '3'):
-                    print("Iris-Virginica\n")
-                    
-               print("R = U\u03A3V^(T)")
-               print()
+               if (tipo_iris == '4'):
+                   menu()
                
-               print("SEM O TERMO INDEPENDENTE: ")
-               print("U = ", U)
-               print()
-               print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
-               print()
-               print("V^T = ", VT)
-               print()
-               print()
+               else:
                 
-               print("COM O TERMO INDEPENDENTE: ")
-               print("U = ", U1)
-               print()
-               print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))
-               print()
-               print("V^T = ", VT1)
+                   dados = pegarDados (tipo_iris)
+                   R,p,R1,p1 = construir_equacao_normal(dados)
+                   U, s, VT = linalg.svd(R)
+                   U1, s1, VT1 = linalg.svd(R1)
+                   
+                   if  (tipo_iris == '1'):
+                        print("Iris-Setosa\n")
+                   elif (tipo_iris == '2'):
+                        print("Iris-Versicolor\n")
+                   elif (tipo_iris == '3'):
+                        print("Iris-Virginica\n")
+                        
+                   print("R = U\u03A3V^(T)")
+                   print()
+                   
+                   print("SEM O TERMO INDEPENDENTE: ")
+                   print("U = ", U)
+                   print()
+                   print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
+                   print()
+                   print("V^T = ", VT)
+                   print()
+                   print()
+                    
+                   print("COM O TERMO INDEPENDENTE: ")
+                   print("U = ", U1)
+                   print()
+                   print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))
+                   print()
+                   print("V^T = ", VT1)
+                   
+                   print()
+                   
                
                 
         if (resultado == '4'):
@@ -453,5 +471,7 @@ def menu():
             estimativa1 = estimar_amostras(E,w1_setosa,w1_versicolor,w1_virginica,c_independente)
             print("E = ", estimativa1)
             
+            menu()
+                       
 ######## chamada ao menu
 menu()

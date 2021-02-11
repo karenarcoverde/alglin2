@@ -120,7 +120,7 @@ As bibliotecas utilizadas para construir o código em Python foram:
 A variável $y$ da coluna PetalWidthCm foi escrita em função das outras variáveis $x_{1}$,$x_{2}$,$x_{3}$ das colunas SepalLengthCm,SepalWidthCm,PetalLengthCm, respectivamente. De forma que 
 $y= a\cdot x_{1} +b\cdot x_{2}+c\cdot x_{3}$ sem o termo independente. Com o termo independente: $y= a\cdot x_{1} +b\cdot x_{2}+c\cdot x_{3} +k$.
 
-    Além disso, a equação normal é: $x^{T}\cdot x\cdot w=x^{T}\cdot y$, onde $w$ é o vetor de coeficientes, o vetor y é a coluna PetalWidthCm e a matriz $x$ é as colunas SepalLengthCm,SepalWidthCm,PetalLengthCm (se for com o termo independente, possui uma coluna a mais que só contém valores 1).
+    Além disso, a equação normal é: $x^{T}\cdot x\cdot w=x^{T}\cdot y$ ($R\cdot w=p$, $R=x^{T}\cdot x$ e $p = x^{T}\cdot y$), onde $w$ é o vetor de coeficientes, o vetor y é a coluna PetalWidthCm e a matriz $x$ é as colunas SepalLengthCm,SepalWidthCm,PetalLengthCm (se for com o termo independente, possui uma coluna a mais que só contém valores 1).
 
 
 \section{Questão 1}
@@ -175,6 +175,10 @@ Iris-Setosa
 R = V*!$\Lambda$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57]
+ [255.73 172.5   75.51]
+ [112.57  75.51  33.84]]
+
 V =  [[-0.80618188 -0.45661854  0.37625828]
  [-0.54157827  0.31342349 -0.78003762]
  [-0.23825146  0.8326255   0.49997102]]
@@ -189,6 +193,11 @@ V^T =  [[-0.80618188 -0.54157827 -0.23825146]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57  75.5 ]
+ [255.73 172.5   75.51  50.6 ]
+ [112.57  75.51  33.84  22.4 ]
+ [ 75.5   50.6   22.4   15.  ]]
+
 V =  [[-0.79610972  0.1628056  -0.47792329 -0.33360603]
  [-0.53478061 -0.03864172  0.33762985  0.77364243]
  [-0.23529777  0.18572124  0.80860497 -0.50626137]
@@ -214,6 +223,10 @@ Iris-Versicolor
 R = V*!$\Lambda$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59]
+ [256.64 119.98 184.35]
+ [397.59 184.35 286.5 ]]
+
 V =  [[ 0.76039163  0.64759888 -0.0491961 ]
  [ 0.35223975 -0.47485674 -0.80649751]
  [ 0.54564799 -0.59592513  0.58918716]]
@@ -228,6 +241,11 @@ V^T =  [[ 0.76039163  0.35223975  0.54564799]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59  91.  ]
+ [256.64 119.98 184.35  42.2 ]
+ [397.59 184.35 286.5   65.2 ]
+ [ 91.    42.2   65.2   15.  ]]
+
 V =  [[-0.7545525   0.11812875  0.64474223  0.03167953]
  [-0.34954066  0.11526607 -0.46962259  0.80248968]
  [-0.54144512 -0.01367345 -0.60234554 -0.58637025]
@@ -252,6 +270,10 @@ Iris-Virginica
 R = V*!$\Lambda$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72]
+ [304.85 138.7  253.94]
+ [562.72 253.94 469.3 ]]
+
 V =  [[-0.72592866 -0.63483621  0.2645951 ]
  [-0.32772296 -0.01894783 -0.94458385]
  [-0.60466953  0.77241438  0.19429563]]
@@ -266,6 +288,11 @@ V^T =  [[-0.72592866 -0.32772296 -0.60466953]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72 100.3 ]
+ [304.85 138.7  253.94  45.4 ]
+ [562.72 253.94 469.3   83.6 ]
+ [100.3   45.4   83.6   15.  ]]
+
 V =  [[-7.21743001e-01 -2.76297507e-01  6.34623278e-01 -1.50933108e-04]
  [-3.25843186e-01  9.35769444e-01  3.68031853e-02 -1.29642937e-01]
  [-6.01187515e-01 -1.93722166e-01 -7.68083597e-01 -1.05322749e-01]
@@ -291,6 +318,10 @@ Iris-Setosa
 R = U*!$\Sigma$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57]
+ [255.73 172.5   75.51]
+ [112.57  75.51  33.84]]
+
 U =  [[-0.80618188  0.37625828 -0.45661854]
  [-0.54157827 -0.78003762  0.31342349]
  [-0.23825146  0.49997102  0.8326255 ]]
@@ -305,6 +336,11 @@ V^T =  [[-0.80618188 -0.54157827 -0.23825146]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57  75.5 ]
+ [255.73 172.5   75.51  50.6 ]
+ [112.57  75.51  33.84  22.4 ]
+ [ 75.5   50.6   22.4   15.  ]]
+
 U =  [[-0.79610972  0.33360603  0.47792329 -0.1628056 ]
  [-0.53478061 -0.77364243 -0.33762985  0.03864172]
  [-0.23529777  0.50626137 -0.80860497 -0.18572124]
@@ -328,6 +364,10 @@ Iris-Versicolor
 R = U*!$\Sigma$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59]
+ [256.64 119.98 184.35]
+ [397.59 184.35 286.5 ]]
+
 U =  [[-0.76039163  0.64759888 -0.0491961 ]
  [-0.35223975 -0.47485674 -0.80649751]
  [-0.54564799 -0.59592513  0.58918716]]
@@ -342,6 +382,11 @@ V^T =  [[-0.76039163 -0.35223975 -0.54564799]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59  91.  ]
+ [256.64 119.98 184.35  42.2 ]
+ [397.59 184.35 286.5   65.2 ]
+ [ 91.    42.2   65.2   15.  ]]
+
 U =  [[-0.7545525   0.64474223  0.03167953 -0.11812875]
  [-0.34954066 -0.46962259  0.80248968 -0.11526607]
  [-0.54144512 -0.60234554 -0.58637025  0.01367345]
@@ -365,6 +410,10 @@ Iris-Virginica
 R = U*!$\Sigma$!*V^(T)
 
 SEM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72]
+ [304.85 138.7  253.94]
+ [562.72 253.94 469.3 ]]
+
 U =  [[-0.72592866  0.2645951  -0.63483621]
  [-0.32772296 -0.94458385 -0.01894783]
  [-0.60466953  0.19429563  0.77241438]]
@@ -379,6 +428,11 @@ V^T =  [[-0.72592866 -0.32772296 -0.60466953]
 
 
 COM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72 100.3 ]
+ [304.85 138.7  253.94  45.4 ]
+ [562.72 253.94 469.3   83.6 ]
+ [100.3   45.4   83.6   15.  ]]
+
 U =  [[-7.21743001e-01  2.76297507e-01  6.34623278e-01 -1.50933108e-04]
  [-3.25843186e-01 -9.35769444e-01  3.68031853e-02 -1.29642937e-01]
  [-6.01187515e-01  1.93722166e-01 -7.68083597e-01 -1.05322749e-01]
@@ -758,7 +812,10 @@ def menu():
                     print("R = V\u039BV^(T)")
                     print()
                     
+                    
                     print("SEM O TERMO INDEPENDENTE: ")
+                    print("R = ", R)
+                    print()
                     print("V = ",autovetores)
                     print()
                     print('\u039B = ',matrizDiagonal)
@@ -769,6 +826,8 @@ def menu():
                     print()
                     
                     print("COM O TERMO INDEPENDENTE: ")
+                    print("R = ", R1)
+                    print()
                     print("V = ", autovetores1)
                     print()
                     print('\u039B = ', matrizDiagonal1)
@@ -812,6 +871,8 @@ def menu():
                    print()
                    
                    print("SEM O TERMO INDEPENDENTE: ")
+                   print("R = ", R)
+                   print()
                    print("U = ", U)
                    print()
                    print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
@@ -821,6 +882,8 @@ def menu():
                    print()
                     
                    print("COM O TERMO INDEPENDENTE: ")
+                   print("R = ", R1)
+                   print()
                    print("U = ", U1)
                    print()
                    print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))

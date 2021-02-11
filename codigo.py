@@ -341,7 +341,10 @@ def menu():
                     print("R = V\u039BV^(T)")
                     print()
                     
+                    
                     print("SEM O TERMO INDEPENDENTE: ")
+                    print("R = ", R)
+                    print()
                     print("V = ",autovetores)
                     print()
                     print('\u039B = ',matrizDiagonal)
@@ -352,6 +355,8 @@ def menu():
                     print()
                     
                     print("COM O TERMO INDEPENDENTE: ")
+                    print("R = ", R1)
+                    print()
                     print("V = ", autovetores1)
                     print()
                     print('\u039B = ', matrizDiagonal1)
@@ -395,6 +400,8 @@ def menu():
                    print()
                    
                    print("SEM O TERMO INDEPENDENTE: ")
+                   print("R = ", R)
+                   print()
                    print("U = ", U)
                    print()
                    print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
@@ -404,6 +411,8 @@ def menu():
                    print()
                     
                    print("COM O TERMO INDEPENDENTE: ")
+                   print("R = ", R1)
+                   print()
                    print("U = ", U1)
                    print()
                    print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))

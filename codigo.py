@@ -5,8 +5,6 @@
 
 
 import numpy as np
-from scipy import linalg
-from scipy.linalg import diagsvd
 import sys
 
 
@@ -163,8 +161,43 @@ def decomposicao_espectral(R):
     autovalores, autovetores = np.linalg.eig(R) 
     # matriz diagonal de autovalores
     matrizDiagonal = np.diag(autovalores) 
-      
+       
     return  autovetores, matrizDiagonal
+
+# ----------------------------------------------------------
+def contruir_svd (R):
+    s = []
+    i = 0
+    j = 0
+    
+    # R = U.s.VT
+    #determinando autovalores e autovetores
+    ### U
+    ## autovetores de R.(R^T)
+    autovaloresU, autovetoresU = np.linalg.eig(np.dot(R,np.transpose(R)))
+    
+    ### V
+    ## autovetores de (R^T).R
+    autovaloresV, autovetoresV = np.linalg.eig(np.dot(np.transpose(R),R))
+    
+    tamanho_autovalores_U = autovaloresU.shape
+    tamanho_autovalores_V = autovaloresV.shape
+      
+    while (i < tamanho_autovalores_U [0]):       
+        while (j < tamanho_autovalores_V [0]):
+            if (autovaloresU [i] == autovaloresV [j]):
+                s.append(np.sqrt(autovaloresU [i]))
+            elif (autovaloresV [j] == 0):
+                s.append(0)
+            j += 1
+            
+        if (autovaloresU [i] == 0):
+            s.append(0)
+            
+        j = 0    
+        i += 1
+    
+    return  autovetoresU, np.array(s),np.transpose(autovetoresV)
 
 # ----------------------------------------------------------
 def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):
@@ -386,8 +419,8 @@ def menu():
                 
                    dados = pegarDados (tipo_iris)
                    R,p,R1,p1 = construir_equacao_normal(dados)
-                   U, s, VT = linalg.svd(R)
-                   U1, s1, VT1 = linalg.svd(R1)
+                   U, s, VT = contruir_svd(R)
+                   U1, s1, VT1 = contruir_svd(R1)
                    
                    if  (tipo_iris == 1):
                         print("Iris-Setosa\n")
@@ -404,7 +437,7 @@ def menu():
                    print()
                    print("U = ", U)
                    print()
-                   print('\u03A3 = ', diagsvd(s, R.shape[0], R.shape[1]))
+                   print('\u03A3 = ', np.diag(s))
                    print()
                    print("V^T = ", VT)
                    print()
@@ -415,7 +448,7 @@ def menu():
                    print()
                    print("U = ", U1)
                    print()
-                   print('\u03A3 = ', diagsvd(s1, R1.shape[0], R1.shape[1]))
+                   print('\u03A3 = ', np.diag(s1))
                    print()
                    print("V^T = ", VT1)
                    

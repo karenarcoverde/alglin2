@@ -187,12 +187,7 @@ def contruir_svd (R):
         while (j < tamanho_autovalores_V [0]):
             if (autovaloresU [i] == autovaloresV [j]):
                 s.append(np.sqrt(autovaloresU [i]))
-            elif (autovaloresV [j] == 0):
-                s.append(0)
             j += 1
-            
-        if (autovaloresU [i] == 0):
-            s.append(0)
             
         j = 0    
         i += 1

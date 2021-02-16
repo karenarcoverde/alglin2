@@ -638,31 +638,23 @@ def decomposicao_espectral(R):
 def contruir_svd (R):
     s = []
     i = 0
-    j = 0
-    
+ 
     # R = U.s.VT
     #determinando autovalores e autovetores
     ### U
     ## autovetores de R.(R^T)
     autovaloresU, autovetoresU = np.linalg.eig(np.dot(R,np.transpose(R)))
     
-    ### V
-    ## autovetores de (R^T).R
-    autovaloresV, autovetoresV = np.linalg.eig(np.dot(np.transpose(R),R))
+    # como R eh simetrica e quadrada: (R^T).R = R.(R^T)
+    # entao autovetores e autovalores de U sao iguais aos de V
     
     tamanho_autovalores_U = autovaloresU.shape
-    tamanho_autovalores_V = autovaloresV.shape
       
     while (i < tamanho_autovalores_U [0]):       
-        while (j < tamanho_autovalores_V [0]):
-            if (autovaloresU [i] == autovaloresV [j]):
-                s.append(np.sqrt(autovaloresU [i]))
-            j += 1
-            
-        j = 0    
+        s.append(np.sqrt(autovaloresU [i]))
         i += 1
     
-    return  autovetoresU, np.array(s),np.transpose(autovetoresV)
+    return  autovetoresU, np.array(s),np.transpose(autovetoresU)
 
 # ----------------------------------------------------------
 def estimar_amostras(amostra, w_setosa,w_versicolor,w_virginica,c_independente):

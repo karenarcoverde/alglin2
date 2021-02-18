@@ -90,13 +90,14 @@
 
 \section{Introdução}
 \subsection{Conteúdo}
-    O relatório contém os resultados encontrados para cada questão passada pelo professor e o código final em linguagem Python.
+    O relatório contém a explicação do código e os resultados encontrados para cada questão passada pelo professor e o código final em linguagem Python com uma explicação de como o programa funciona.
 \subsection{Software e linguagem}
     O software usado para programação foi o Spyder e a linguagem foi o Python 3.8.5.
-\subsection{Biblioteca}
-A biblioteca utilizada para construir o código em Python foi:
+\subsection{Biblioteca/Módulo}
+A biblioteca e o módulo utilizados para construir o código em Python foi:
 \begin{itemize}
-   \item Numpy
+   \item Numpy - É usada para fazer as operações com as matrizes
+   \item Sys - É um modulo que faz parte da biblioteca padrão do Python e foi usado o "sys.exit (0)" para sair do programa quando o usuário pedir.
  \end{itemize}
  \subsection{Base de dados}
  O  conjunto de dados "Iris" selecionado para o trabalho foi:
@@ -115,358 +116,78 @@ A biblioteca utilizada para construir o código em Python foi:
 \label {tabela2}
 \end{table}
 
-\section{Observações}
+
+
+\section{Explicação e Código}
+\subsection{Explicação do código}
+
+\subsubsection{Menu}
+O código contém um menu principal onde o usuário pode escolher qual questão deseja saber o resultado. Caso o usuário tenha selecionado as questões 1,2 e 3, aparecerá qual tipo de Iris (Iris-Setosa, Iris-Versicolor, Iris-Virginica) deseja ver o resultado. Se tiver selecionado a questão 4, aparecerá o resultado em seguida, sem a opção de escolher o tipo de Iris. Se o usário digitar 5 ("SAIR") no Menu Principal, o programa se encerra. Caso ele digite 4 ("VOLTAR AO MENU PRINCIPAL"), quando estiver no Menu Iris, o programa volta para o menu principal e o usuário poderá escolher novamente o número da questão ou poderá sair. 
+Um exemplo da questão 1 de como aparece para o usuário:
+
+\begin{lstlisting}
+##################### MENU PRINCIPAL ##############################
+Digite somente o numero da questao que voce deseja ver o resultado: 
+1 = Questao 1
+2 = Questao 2
+3 = Questao 3
+4 = Questao 4
+5 = SAIR
+###################################################################
+\end{lstlisting}
+
+\begin{lstlisting}
+##################### MENU IRIS #########################
+Digite qual especie voce deseja fazer a regressao linear: 
+1 = Iris-Setosa
+2 = Iris-Versicolor
+3 = Iris Virginica
+4 = VOLTAR AO MENU PRINCIPAL
+#########################################################
+\end{lstlisting}
+
+\subsubsection{Funções construídas}
+O código também contém funções construídas e que são chamadas durante o menu principal, tais como: \textbf{pegarDados}, \textbf{construir\_equacao\_normal}, \textbf{PLU}, \textbf{decomposicao\_espectral}, \textbf{construir\_svd} e \textbf{estimar\_amostras}.
+\subsubsection{pegarDados}
+   A função \textbf{pegarDados} extrai os dados do arquivo ".csv", de acordo com o tipo de Iris selecionado pelo usuário, percorrendo todo o banco de dados e retorna os dados em forma de matriz para ser usada em outras funções. Nessa matriz, os valores estão em forma de matriz [15x4], onde cada linha é um ID, e cada coluna um dos dados das medições das flores. Por exemplo, se o usuário escolheu a Questão 1 e Iris-Versicolor, os dados guardados em uma matriz serão referentes à Iris-Versicolor.
+\subsubsection{construir\_equacao\_normal}
 A variável $y$ da coluna PetalWidthCm foi escrita em função das outras variáveis $x_{1}$,$x_{2}$,$x_{3}$ das colunas SepalLengthCm,SepalWidthCm,PetalLengthCm, respectivamente. De forma que 
 $y= a\cdot x_{1} +b\cdot x_{2}+c\cdot x_{3}$ sem o termo independente. Com o termo independente: $y= a\cdot x_{1} +b\cdot x_{2}+c\cdot x_{3} +k$.
 
     Além disso, a equação normal é: $x^{T}\cdot x\cdot w=x^{T}\cdot y$ ($R\cdot w=p$, $R=x^{T}\cdot x$ e $p = x^{T}\cdot y$), onde $w$ é o vetor de coeficientes, o vetor y é a coluna PetalWidthCm e a matriz $x$ é as colunas SepalLengthCm,SepalWidthCm,PetalLengthCm (se for com o termo independente, possui uma coluna a mais que só contém valores 1).
+    
+   A função \textbf{construir\_equacao\_normal} utliza a equação normal $x^{T}\cdot x\cdot w=x^{T}\cdot y$ ($R\cdot w=p$, $R=x^{T}\cdot x$ e $p = x^{T}\cdot y$) e retorna os termos R e p com e sem o termo independente, considerando a construção de uma equação normal para cada tipo de Iris. Sem o termo independente, é construída uma matriz x deletando-se a última coluna da matriz de dados, de forma que a última coluna (PetalWidthCm) seja a nossa estimativa posteriormente, formando uma matriz [15x3]. Caso seja com o termo independente, essa última coluna é substituída por uma coluna com valores 1, formando uma matriz [15x4]. Para construir a matriz y, é deletada as três primeiras colunas (SepalLengthCm,SepalWidthCm,PetalLengthCm) da matriz de dados, sobrando só a última coluna (PetalWidthCm), formando uma matriz [15x1]. 
+   
+   Por fim, para encontrar R, é feita a transposta de x e multiplicada por x, formando uma matriz R [3x3] sem o termo independente e [4x4] com o termo independente. Também para encontrar p, é feita a transposta de x multiplicada por y, formando uma matriz [3x1] sem o termo independente e [4x1] com o termo independente. Essa função retornará dois R e p diferentes, sem o termo independente e com o termo independente, que poderá ser utilizada posteriormente para as outras funções.
+\subsubsection{PLU}
+A função \textbf{PLU} tem como objetivo transformar R em uma matriz triangular superior. Primeiro é feito um loop para percorrer cada coluna da matriz R, depois um loop dentro desse para percorrer as linhas de R. Sendo assim, ele fixa uma coluna em R e percorre todas as linhas de R nessa mesma coluna, depois passa para próxima coluna e faz o mesmo loop até terminar as colunas. Durante o loop das colunas, é verificado sempre se o pivô é igual a zero. Caso não seja zero, começa a construir a matriz L (triangular inferior). Caso seja igual a zero, vai para uma condição, para criar a matriz de permutação (P). Cada vez que é construída a matriz L ou P, R e p são multiplicadas por L ou P.
 
+A matriz L é construída coluna por coluna. Criando uma matriz de zeros chamada L do mesmo tamanho que R. Tomando como pivô os elementos na diagonal principal de R, um loop que percorre as linhas de R e partindo da informação do pivô da coluna atual, coloca-se na matriz L na posição com número da linha igual ao número da linha do pivô de R+1 e número da coluna do pivô de R: o negativo do valor atual da linha e coluna que está percorrendo o loop em R dividido pelo pivô da coluna analisada em R. Soma-se 1 no loop que percorre as linhas de R e faz o mesmo procedimento até finalizar todas as linhas de R. Depois completa a diagonal principal de L todas com valor 1. Cada vez que o pivô de R é diferente de zero, a matriz L é criada com elementos zeros do mesmo tamanho que a matriz R, até ter percorrido todas as colunas de R. Para a próxima coluna construída de L ou a próxima matriz L, é considerada como número da linha de L igual ao número da coluna do pivô de R+1 e segue-se o mesmo procedimento para percorrer as linhas de R, somando-se 1 a esse valor de linha de R já estabelecido.
 
-\section{Questão 1}
-\subsection{Resultados}
-\subsubsection{Iris-Setosa}
-\begin{lstlisting}
-Iris-Setosa
+A matriz P é construída criando uma matriz de zeros do mesmo tamanho que R. Na matriz R, temos o objetivo de trocar a linha que está o pivô de R igual a zero pela linha abaixo dela e a linha abaixo do pivô de R pela linha do pivô de R. Dessa forma, na matriz P, o número da linha do pivô de R e coluna do pivô de R+1 recebe o valor 1. E o número da linha abaixo do pivô de R e com o mesmo número da coluna do pivô de R recebe o valor 1. Depois é feito um loop para percorrer cada linha de P e ver se tem algum elemento 1 na linha, caso já tenha, não é colocado 1. Se não tiver o valor 1 em qualquer elemento da linha, é colocado 1 na linha e coluna iguais ao número da linha analisada, de forma a ter 1 na diagonal principal, quando as linhas não forem trocadas. 
 
-SEM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3
-[a b c] = [ 0.07455282 -0.06602361  0.03673264]
+E assim o loop continua, indo para a próxima coluna da matriz R até ter percorrido todas as colunas. Quando tiver terminado de percorrer todas as colunas, já que a matriz R já terá se tornado triangular superior, é feito o backsubstitution, em que é dado R e p e a função np.linalg.solve retorna w (os coeficientes). 
 
-COM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3 + k
-[a b c k] = [ 0.13497209 -0.07886596  0.10365958 -0.36144997]
-\end{lstlisting}
+\subsubsection{decomposicao\_espectral}
+   A função \textbf{decomposicao\_espectral} calcula os autovalores e autovetores de R. Posteriormente, retorna uma matriz diagonal de autovalores de R ($\Lambda$) e uma matriz de autovetores de R (matriz V). No menu principal, quando selecionada a opção Questão 2, essa parte chamará a função decomposicao\_espectral duas vezes, uma para calcular as matrizes sem o termo independente e outra com o termo independente. Essa parte usará essas matrizes encontradas e imprimirá R, V, $\Lambda$ e a transposta de V ($V^T$) com e sem o termo independente. 
+\subsubsection{construir\_svd}
+   A função \textbf{construir\_svd} foi considerada como: U os autovetores de $R\cdot R^{T}$, V os autovetores de $R^{T}\cdot
+    R$ e $\Sigma$ a matriz diagonal formada com os valores singulares (raiz quadrada dos autovalores) em comuns em $R^{T}\cdot R$ e $R\cdot R^{T}$. Assim: $R = U\cdot \Sigma \cdot V^{T}$.
+    
+Como R é a matriz da equação normal, formada assim: $R = x^{T}\cdot x$. Nesse sentido, R é simétrica, já que $R^{T} = R$, uma vez que $(x^{T}\cdot x)^{T} = x^{T}\cdot x$. Por consequência, $R^{T}\cdot R = R\cdot R^{T}$, $R^{T}\cdot R$ possuirá os mesmos autovalores e autovetores de $R\cdot R^{T}$ e U será igual a V. Dessa forma, só foi calculado os autovetores e autovalores de $R\cdot R^{T}$.
 
-\subsubsection{Iris-Versicolor}
-\begin{lstlisting}
-Iris-Versicolor
+Desse modo, essa função calcula os autovalores e autovetores (matriz U) de $R\cdot R^{T}$, depois faz um loop, para descobrir os valores singulares, então percorre cada  autovalor, tira a raiz quadrada e coloca em um vetor. Essa função retornará os autovetores de $R\cdot R^{T}$ (matriz U), um vetor com os valores singulares de $R\cdot R^{T}$ e a transposta de U ($U^T$). Já no menu principal, quando selecionada a opção Questão 3, essa parte chamará a função construir\_svd duas vezes, uma para calcular as matrizes e os vetores sem  o termo independente e outra com o termo independente. Essa parte usará essas matrizes e vetores encontrados e imprimirá R, U, uma matriz diagonal de valores singulares ($\Sigma$) e a transposta de U (Lembrando que a transposta de V é igual a transposta de U, já que $U = V$) com e sem o termo independente.
 
-SEM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3
-[a b c] = [-0.14382683  0.17051618  0.40397714]
+\subsubsection{estimar\_amostras}
+A função \textbf{estimar\_amostras} terá o propósito de fazer o produto interno de cada vetor de amostras selecionadas pelo professor, excluindo a coluna PetalWidthCm, com cada vetor de coeficientes da Iris-Setosa, Iris-Versicolor e Iris-Virginica. Caso seja com o termo independente, terá mais um valor nos vetores de amostras selecionados, com o número 1. Uma vez que a coluna PetalWidthCm será a selecionada para estimar a classe da Iris. 
 
-COM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3 + k
-[a b c k] = [-0.06826027  0.24149193  0.39877688 -0.63863516]
-\end{lstlisting}
+Depois de fazer o produto interno, será calculada a diferença (erro) do resultado do produto interno com o valor da PetalWidthCm de cada amostra e colocada numa lista que posteriormente será percorrida para cada erro ser transformado em seu módulo. 
 
-\subsubsection{Iris-Virginica}
-\begin{lstlisting}
-Iris-Virginica
+Por fim, é usada uma função que pega o menor valor dessa lista. Esse menor valor da lista é comparada com o módulo de cada erro da Iris-Setosa, Iris-Versicolor e Iris-Virginica, quando a comparação der igual, é retornada uma string com o tipo de Iris que deu igual. Por exemplo, se a comparação deu igual na Iris-Virginica, retornará uma string "Iris-Virginica".
 
-SEM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3
-[a b c] = [-0.11329721  0.3990124   0.25976859]
+No Menu Principal, a função estimar\_amostras é chamada duas vezes, uma para calcular sem o termo independente e imprimir a classe estimada e outra com o termo independente. Por isso existe uma variável booleana que é True quando quer calcular com o termo independente e False quando é sem o termo independente. De forma que se essa variável for True, ela adiciona o valor 1 nos vetores de amostras.
 
-COM O TERMO INDEPENDENTE: 
-y = a*x1 + b*x2 + c*x3 + k
-[a b c k] = [-0.11686468  0.35346044  0.22325742  0.36734017]
-\end{lstlisting}
-
-\section{Questão 2}
-\subsection{Resultados}
-\subsubsection {Iris-Setosa}
-
-
-\begin{lstlisting}
-Iris-Setosa
-
-R = V*!$\Lambda$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[381.33 255.73 112.57]
- [255.73 172.5   75.51]
- [112.57  75.51  33.84]]
-
-V =  [[-0.80618188 -0.45661854  0.37625828]
- [-0.54157827  0.31342349 -0.78003762]
- [-0.23825146  0.8326255   0.49997102]]
-
-*!$\Lambda$!* =  [[5.86392634e+02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 5.29776824e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 7.47589571e-01]]
-
-V^T =  [[-0.80618188 -0.54157827 -0.23825146]
- [-0.45661854  0.31342349  0.8326255 ]
- [ 0.37625828 -0.78003762  0.49997102]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[381.33 255.73 112.57  75.5 ]
- [255.73 172.5   75.51  50.6 ]
- [112.57  75.51  33.84  22.4 ]
- [ 75.5   50.6   22.4   15.  ]]
-
-V =  [[-0.79610972  0.1628056  -0.47792329 -0.33360603]
- [-0.53478061 -0.03864172  0.33762985  0.77364243]
- [-0.23529777  0.18572124  0.80860497 -0.50626137]
- [-0.15765144 -0.96825037  0.06126507 -0.18407563]]
-
-*!$\Lambda$!* =  [[6.01336860e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 2.79352229e-02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 5.31947766e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 7.73257486e-01]]
-
-V^T =  [[-0.79610972 -0.53478061 -0.23529777 -0.15765144]
- [ 0.1628056  -0.03864172  0.18572124 -0.96825037]
- [-0.47792329  0.33762985  0.80860497  0.06126507]
- [-0.33360603  0.77364243 -0.50626137 -0.18407563]]
-
-\end{lstlisting}
-
-\subsubsection{Iris-Versicolor}
-
-\begin{lstlisting}
-Iris-Versicolor
-
-R = V*!$\Lambda$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[555.38 256.64 397.59]
- [256.64 119.98 184.35]
- [397.59 184.35 286.5 ]]
-
-V =  [[ 0.76039163  0.64759888 -0.0491961 ]
- [ 0.35223975 -0.47485674 -0.80649751]
- [ 0.54564799 -0.59592513  0.58918716]]
-
-*!$\Lambda$!* =  [[9.59570396e+02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 1.33162776e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 9.57976568e-01]]
-
-V^T =  [[ 0.76039163  0.35223975  0.54564799]
- [ 0.64759888 -0.47485674 -0.59592513]
- [-0.0491961  -0.80649751  0.58918716]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[555.38 256.64 397.59  91.  ]
- [256.64 119.98 184.35  42.2 ]
- [397.59 184.35 286.5   65.2 ]
- [ 91.    42.2   65.2   15.  ]]
-
-V =  [[-0.7545525   0.11812875  0.64474223  0.03167953]
- [-0.34954066  0.11526607 -0.46962259  0.80248968]
- [-0.54144512 -0.01367345 -0.60234554 -0.58637025]
- [-0.1237297  -0.98619084  0.030691    0.1057197 ]]
-
-*!$\Lambda$!* =  [[9.74487597e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 7.14132919e-02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 1.33280153e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 9.68188359e-01]]
-
-V^T =  [[-0.7545525  -0.34954066 -0.54144512 -0.1237297 ]
- [ 0.11812875  0.11526607 -0.01367345 -0.98619084]
- [ 0.64474223 -0.46962259 -0.60234554  0.030691  ]
- [ 0.03167953  0.80248968 -0.58637025  0.1057197 ]]
-\end{lstlisting}
-
-\subsubsection{Iris-Virginica}
-
-\begin{lstlisting}
-Iris-Virginica
-
-R = V*!$\Lambda$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[676.15 304.85 562.72]
- [304.85 138.7  253.94]
- [562.72 253.94 469.3 ]]
-
-V =  [[-0.72592866 -0.63483621  0.2645951 ]
- [-0.32772296 -0.01894783 -0.94458385]
- [-0.60466953  0.77241438  0.19429563]]
-
-*!$\Lambda$!* =  [[1.28249881e+03 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 5.79253032e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 1.07193335e+00]]
-
-V^T =  [[-0.72592866 -0.32772296 -0.60466953]
- [-0.63483621 -0.01894783  0.77241438]
- [ 0.2645951  -0.94458385  0.19429563]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[676.15 304.85 562.72 100.3 ]
- [304.85 138.7  253.94  45.4 ]
- [562.72 253.94 469.3   83.6 ]
- [100.3   45.4   83.6   15.  ]]
-
-V =  [[-7.21743001e-01 -2.76297507e-01  6.34623278e-01 -1.50933108e-04]
- [-3.25843186e-01  9.35769444e-01  3.68031853e-02 -1.29642937e-01]
- [-6.01187515e-01 -1.93722166e-01 -7.68083597e-01 -1.05322749e-01]
- [-1.07176625e-01  1.02308151e-01 -7.71129602e-02  9.85951218e-01]]
-
-*!$\Lambda$!* =  [[1.29740071e+03 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 1.08243546e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 5.82311582e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 8.45463191e-02]]
-
-V^T =  [[-7.21743001e-01 -3.25843186e-01 -6.01187515e-01 -1.07176625e-01]
- [-2.76297507e-01  9.35769444e-01 -1.93722166e-01  1.02308151e-01]
- [ 6.34623278e-01  3.68031853e-02 -7.68083597e-01 -7.71129602e-02]
- [-1.50933108e-04 -1.29642937e-01 -1.05322749e-01  9.85951218e-01]]
-\end{lstlisting}
-
-\section{Questão 3}
-\subsection{Resultados}
-\subsubsection{Iris-Setosa}
-\begin{lstlisting}
-Iris-Setosa
-
-R = U*!$\Sigma$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[381.33 255.73 112.57]
- [255.73 172.5   75.51]
- [112.57  75.51  33.84]]
-
-U =  [[ 0.80618188 -0.45661854 -0.37625828]
- [ 0.54157827  0.31342349  0.78003762]
- [ 0.23825146  0.8326255  -0.49997102]]
-
-*!$\Sigma$!* =  [[5.86392634e+02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 5.29776824e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 7.47589571e-01]]
-
-V^T =  [[ 0.80618188  0.54157827  0.23825146]
- [-0.45661854  0.31342349  0.8326255 ]
- [-0.37625828  0.78003762 -0.49997102]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[381.33 255.73 112.57  75.5 ]
- [255.73 172.5   75.51  50.6 ]
- [112.57  75.51  33.84  22.4 ]
- [ 75.5   50.6   22.4   15.  ]]
-
-U =  [[ 0.79610972 -0.33360603 -0.47792329 -0.1628056 ]
- [ 0.53478061  0.77364243  0.33762985  0.03864172]
- [ 0.23529777 -0.50626137  0.80860497 -0.18572124]
- [ 0.15765144 -0.18407563  0.06126507  0.96825037]]
-
-*!$\Sigma$!* =  [[6.01336860e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 7.73257486e-01 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 5.31947766e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 2.79352230e-02]]
-
-V^T =  [[ 0.79610972  0.53478061  0.23529777  0.15765144]
- [-0.33360603  0.77364243 -0.50626137 -0.18407563]
- [-0.47792329  0.33762985  0.80860497  0.06126507]
- [-0.1628056   0.03864172 -0.18572124  0.96825037]]
-\end{lstlisting}
-
-\subsubsection{Iris-Versicolor}
-\begin{lstlisting}
-Iris-Versicolor
-
-R = U*!$\Sigma$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[555.38 256.64 397.59]
- [256.64 119.98 184.35]
- [397.59 184.35 286.5 ]]
-
-U =  [[ 0.76039163  0.64759888 -0.0491961 ]
- [ 0.35223975 -0.47485674 -0.80649751]
- [ 0.54564799 -0.59592513  0.58918716]]
-
-*!$\Sigma$!* =  [[9.59570396e+02 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 1.33162776e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 9.57976568e-01]]
-
-V^T =  [[ 0.76039163  0.35223975  0.54564799]
- [ 0.64759888 -0.47485674 -0.59592513]
- [-0.0491961  -0.80649751  0.58918716]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[555.38 256.64 397.59  91.  ]
- [256.64 119.98 184.35  42.2 ]
- [397.59 184.35 286.5   65.2 ]
- [ 91.    42.2   65.2   15.  ]]
-
-U =  [[ 0.7545525  -0.64474223 -0.11812875  0.03167953]
- [ 0.34954066  0.46962259 -0.11526607  0.80248968]
- [ 0.54144512  0.60234554  0.01367345 -0.58637025]
- [ 0.1237297  -0.030691    0.98619084  0.1057197 ]]
-
-*!$\Sigma$!* =  [[9.74487597e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 1.33280153e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 7.14132919e-02 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 9.68188359e-01]]
-
-V^T =  [[ 0.7545525   0.34954066  0.54144512  0.1237297 ]
- [-0.64474223  0.46962259  0.60234554 -0.030691  ]
- [-0.11812875 -0.11526607  0.01367345  0.98619084]
- [ 0.03167953  0.80248968 -0.58637025  0.1057197 ]]
-\end{lstlisting}
-
-\subsubsection{Iris-Virginica}
-\begin{lstlisting}
-Iris-Virginica
-
-R = U*!$\Sigma$!*V^(T)
-
-SEM O TERMO INDEPENDENTE: 
-R =  [[676.15 304.85 562.72]
- [304.85 138.7  253.94]
- [562.72 253.94 469.3 ]]
-
-U =  [[ 0.72592866 -0.63483621 -0.2645951 ]
- [ 0.32772296 -0.01894783  0.94458385]
- [ 0.60466953  0.77241438 -0.19429563]]
-
-*!$\Sigma$!* =  [[1.28249881e+03 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 5.79253032e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 1.07193335e+00]]
-
-V^T =  [[ 0.72592866  0.32772296  0.60466953]
- [-0.63483621 -0.01894783  0.77241438]
- [-0.2645951   0.94458385 -0.19429563]]
-
-
-COM O TERMO INDEPENDENTE: 
-R =  [[676.15 304.85 562.72 100.3 ]
- [304.85 138.7  253.94  45.4 ]
- [562.72 253.94 469.3   83.6 ]
- [100.3   45.4   83.6   15.  ]]
-
-U =  [[ 7.21743001e-01 -2.76297507e-01 -6.34623278e-01 -1.50933128e-04]
- [ 3.25843186e-01  9.35769444e-01 -3.68031855e-02 -1.29642937e-01]
- [ 6.01187515e-01 -1.93722166e-01  7.68083597e-01 -1.05322749e-01]
- [ 1.07176625e-01  1.02308151e-01  7.71129601e-02  9.85951218e-01]]
-
-*!$\Sigma$!* =  [[1.29740071e+03 0.00000000e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 1.08243546e+00 0.00000000e+00 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 5.82311582e-01 0.00000000e+00]
- [0.00000000e+00 0.00000000e+00 0.00000000e+00 8.45463191e-02]]
-
-V^T =  [[ 7.21743001e-01  3.25843186e-01  6.01187515e-01  1.07176625e-01]
- [-2.76297507e-01  9.35769444e-01 -1.93722166e-01  1.02308151e-01]
- [-6.34623278e-01 -3.68031855e-02  7.68083597e-01  7.71129601e-02]
- [-1.50933128e-04 -1.29642937e-01 -1.05322749e-01  9.85951218e-01]]
-\end{lstlisting}
-
-\section{Questão 4}
-\subsection{Resultados}
-\begin{lstlisting}
-SEM O TERMO INDEPENDENTE: 
-A =  Iris-Versicolor
-B =  Iris-Setosa
-C =  Iris-Setosa
-D =  Iris-Versicolor
-E =  Iris-Virginica
-
-COM O TERMO INDEPENDENTE: 
-A =  Iris-Versicolor
-B =  Iris-Setosa
-C =  Iris-Setosa
-D =  Iris-Versicolor
-E =  Iris-Virginica
-\end{lstlisting}
-
-\section{Código}
+\subsection{Código}
 \begin{lstlisting}
 # Programa codigo.py
 # Autora: Karen dos Anjos Arcoverde
@@ -487,6 +208,7 @@ def pegarDados(tipo_iris):
     dados = []
     IDs = []
     
+    ## definicao dos ids das especies selecionadas para o trabalho
     Setosa = range(25,39+1)
     Versicolor = range(75,89+1)
     Virginica = range (125,139+1)
@@ -504,7 +226,6 @@ def pegarDados(tipo_iris):
     for i in range(1,46): # percorre todo o banco de dados 1-45
         linha = (arquivo.readline()).split(',') #separa os dados por virgula
     
-        
         if  (int(linha[0]) in IDs):# percorre os ids selecionados
             linha.pop(0) # retira o ID dos dados
             linha.pop(-1) # retira a especie dos dados
@@ -514,6 +235,7 @@ def pegarDados(tipo_iris):
             dados.append(linha) #adiciona na lista de dados
             
     arquivo.close()
+    
     return dados
 
 # ----------------------------------------------------------
@@ -536,7 +258,7 @@ def construir_equacao_normal (dados):
     x = np.array(dados) 
     x = np.delete(x.reshape(15,4),3,1) #deleta a ultima coluna de x
     x_transposta = np.transpose(x) #faz a transposta de x: (x^T)
-    
+       
     #achar R
     R = np.dot(x_transposta,x) #multiplica (x^T) por x
     
@@ -545,16 +267,16 @@ def construir_equacao_normal (dados):
     y = np.delete(y.reshape(15,4),0,1) #deleta a primeira coluna de y
     y = np.delete(y.reshape(15,3),0,1) #deleta a segunda coluna de y
     y = np.delete(y.reshape(15,2),0,1) #deleta a terceira coluna de y
-
+    
     #achar p 
     p = np.dot(x_transposta,y) 
-    
+  
     ###### com termo independente #####
     # y = a*x1 +b*x2 +c*x3 +k
      
     for i in range (0,15):
         dados[i][3] = 1
-    
+        
     #achar (x^T) e x
     x = np.array(dados) 
     x_transposta = np.transpose(x) #faz a transposta de x: (x^T)
@@ -562,7 +284,7 @@ def construir_equacao_normal (dados):
     R1= np.dot(x_transposta,x) #multiplica (x^T) por x
     #achar p 
     p1 = np.dot(x_transposta,y) 
-    
+      
     return R,p,R1,p1
 
 # ----------------------------------------------------------
@@ -631,7 +353,7 @@ def decomposicao_espectral(R):
     autovalores, autovetores = np.linalg.eig(R) 
     # matriz diagonal de autovalores
     matrizDiagonal = np.diag(autovalores) 
-       
+        
     return  autovetores, matrizDiagonal
 
 # ----------------------------------------------------------
@@ -976,6 +698,370 @@ def menu():
 ######## chamada ao menu
 menu()
 \end{lstlisting}
+
+\section{Questão 1}
+\subsection{Funções utilizadas}
+Para essa parte foram utilizadas as funções: menu, pegarDados, construir\_equacao\_normal e PLU.
+
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal e com o R e p retornados da equação normal, aplicar PLU e backsubstitution para descobrir os coeficientes da equação normal.
+
+\subsection{Resultados}
+\subsubsection{Iris-Setosa}
+\begin{lstlisting}
+Iris-Setosa
+
+SEM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3
+[a b c] = [ 0.07455282 -0.06602361  0.03673264]
+
+COM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3 + k
+[a b c k] = [ 0.13497209 -0.07886596  0.10365958 -0.36144997]
+\end{lstlisting}
+
+\subsubsection{Iris-Versicolor}
+\begin{lstlisting}
+Iris-Versicolor
+
+SEM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3
+[a b c] = [-0.14382683  0.17051618  0.40397714]
+
+COM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3 + k
+[a b c k] = [-0.06826027  0.24149193  0.39877688 -0.63863516]
+\end{lstlisting}
+
+\subsubsection{Iris-Virginica}
+\begin{lstlisting}
+Iris-Virginica
+
+SEM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3
+[a b c] = [-0.11329721  0.3990124   0.25976859]
+
+COM O TERMO INDEPENDENTE: 
+y = a*x1 + b*x2 + c*x3 + k
+[a b c k] = [-0.11686468  0.35346044  0.22325742  0.36734017]
+\end{lstlisting}
+
+\section{Questão 2}
+\subsection{Funções utilizadas}
+Para essa parte foram utilizadas as funções: menu, pegarDados, construir\_equacao\_normal e decomposicao\_espectral.
+
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal, utilizar o R retornado da equação normal para fazer a decomposição espectral.
+\subsection{Resultados}
+\subsubsection {Iris-Setosa}
+
+
+\begin{lstlisting}
+Iris-Setosa
+
+R = V*!$\Lambda$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57]
+ [255.73 172.5   75.51]
+ [112.57  75.51  33.84]]
+
+V =  [[-0.80618188 -0.45661854  0.37625828]
+ [-0.54157827  0.31342349 -0.78003762]
+ [-0.23825146  0.8326255   0.49997102]]
+
+*!$\Lambda$!* =  [[5.86392634e+02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 5.29776824e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 7.47589571e-01]]
+
+V^T =  [[-0.80618188 -0.54157827 -0.23825146]
+ [-0.45661854  0.31342349  0.8326255 ]
+ [ 0.37625828 -0.78003762  0.49997102]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57  75.5 ]
+ [255.73 172.5   75.51  50.6 ]
+ [112.57  75.51  33.84  22.4 ]
+ [ 75.5   50.6   22.4   15.  ]]
+
+V =  [[-0.79610972  0.1628056  -0.47792329 -0.33360603]
+ [-0.53478061 -0.03864172  0.33762985  0.77364243]
+ [-0.23529777  0.18572124  0.80860497 -0.50626137]
+ [-0.15765144 -0.96825037  0.06126507 -0.18407563]]
+
+*!$\Lambda$!* =  [[6.01336860e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 2.79352229e-02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 5.31947766e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 7.73257486e-01]]
+
+V^T =  [[-0.79610972 -0.53478061 -0.23529777 -0.15765144]
+ [ 0.1628056  -0.03864172  0.18572124 -0.96825037]
+ [-0.47792329  0.33762985  0.80860497  0.06126507]
+ [-0.33360603  0.77364243 -0.50626137 -0.18407563]]
+
+\end{lstlisting}
+
+\subsubsection{Iris-Versicolor}
+
+\begin{lstlisting}
+Iris-Versicolor
+
+R = V*!$\Lambda$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59]
+ [256.64 119.98 184.35]
+ [397.59 184.35 286.5 ]]
+
+V =  [[ 0.76039163  0.64759888 -0.0491961 ]
+ [ 0.35223975 -0.47485674 -0.80649751]
+ [ 0.54564799 -0.59592513  0.58918716]]
+
+*!$\Lambda$!* =  [[9.59570396e+02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 1.33162776e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 9.57976568e-01]]
+
+V^T =  [[ 0.76039163  0.35223975  0.54564799]
+ [ 0.64759888 -0.47485674 -0.59592513]
+ [-0.0491961  -0.80649751  0.58918716]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59  91.  ]
+ [256.64 119.98 184.35  42.2 ]
+ [397.59 184.35 286.5   65.2 ]
+ [ 91.    42.2   65.2   15.  ]]
+
+V =  [[-0.7545525   0.11812875  0.64474223  0.03167953]
+ [-0.34954066  0.11526607 -0.46962259  0.80248968]
+ [-0.54144512 -0.01367345 -0.60234554 -0.58637025]
+ [-0.1237297  -0.98619084  0.030691    0.1057197 ]]
+
+*!$\Lambda$!* =  [[9.74487597e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 7.14132919e-02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 1.33280153e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 9.68188359e-01]]
+
+V^T =  [[-0.7545525  -0.34954066 -0.54144512 -0.1237297 ]
+ [ 0.11812875  0.11526607 -0.01367345 -0.98619084]
+ [ 0.64474223 -0.46962259 -0.60234554  0.030691  ]
+ [ 0.03167953  0.80248968 -0.58637025  0.1057197 ]]
+\end{lstlisting}
+
+\subsubsection{Iris-Virginica}
+
+\begin{lstlisting}
+Iris-Virginica
+
+R = V*!$\Lambda$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72]
+ [304.85 138.7  253.94]
+ [562.72 253.94 469.3 ]]
+
+V =  [[-0.72592866 -0.63483621  0.2645951 ]
+ [-0.32772296 -0.01894783 -0.94458385]
+ [-0.60466953  0.77241438  0.19429563]]
+
+*!$\Lambda$!* =  [[1.28249881e+03 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 5.79253032e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 1.07193335e+00]]
+
+V^T =  [[-0.72592866 -0.32772296 -0.60466953]
+ [-0.63483621 -0.01894783  0.77241438]
+ [ 0.2645951  -0.94458385  0.19429563]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72 100.3 ]
+ [304.85 138.7  253.94  45.4 ]
+ [562.72 253.94 469.3   83.6 ]
+ [100.3   45.4   83.6   15.  ]]
+
+V =  [[-7.21743001e-01 -2.76297507e-01  6.34623278e-01 -1.50933108e-04]
+ [-3.25843186e-01  9.35769444e-01  3.68031853e-02 -1.29642937e-01]
+ [-6.01187515e-01 -1.93722166e-01 -7.68083597e-01 -1.05322749e-01]
+ [-1.07176625e-01  1.02308151e-01 -7.71129602e-02  9.85951218e-01]]
+
+*!$\Lambda$!* =  [[1.29740071e+03 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 1.08243546e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 5.82311582e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 8.45463191e-02]]
+
+V^T =  [[-7.21743001e-01 -3.25843186e-01 -6.01187515e-01 -1.07176625e-01]
+ [-2.76297507e-01  9.35769444e-01 -1.93722166e-01  1.02308151e-01]
+ [ 6.34623278e-01  3.68031853e-02 -7.68083597e-01 -7.71129602e-02]
+ [-1.50933108e-04 -1.29642937e-01 -1.05322749e-01  9.85951218e-01]]
+\end{lstlisting}
+
+\section{Questão 3}
+\subsection{Funções utilizadas}
+    Para essa parte foram utilizadas as funções: menu, PegarDados, construir\_equacao\_normal e construir\_svd.
+    
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal, utilizar o R retornado da equação normal para fazer o SVD.
+
+\subsection{Resultados}
+\subsubsection{Iris-Setosa}
+\begin{lstlisting}
+Iris-Setosa
+
+R = U*!$\Sigma$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57]
+ [255.73 172.5   75.51]
+ [112.57  75.51  33.84]]
+
+U =  [[ 0.80618188 -0.45661854 -0.37625828]
+ [ 0.54157827  0.31342349  0.78003762]
+ [ 0.23825146  0.8326255  -0.49997102]]
+
+*!$\Sigma$!* =  [[5.86392634e+02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 5.29776824e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 7.47589571e-01]]
+
+V^T =  [[ 0.80618188  0.54157827  0.23825146]
+ [-0.45661854  0.31342349  0.8326255 ]
+ [-0.37625828  0.78003762 -0.49997102]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[381.33 255.73 112.57  75.5 ]
+ [255.73 172.5   75.51  50.6 ]
+ [112.57  75.51  33.84  22.4 ]
+ [ 75.5   50.6   22.4   15.  ]]
+
+U =  [[ 0.79610972 -0.33360603 -0.47792329 -0.1628056 ]
+ [ 0.53478061  0.77364243  0.33762985  0.03864172]
+ [ 0.23529777 -0.50626137  0.80860497 -0.18572124]
+ [ 0.15765144 -0.18407563  0.06126507  0.96825037]]
+
+*!$\Sigma$!* =  [[6.01336860e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 7.73257486e-01 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 5.31947766e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 2.79352230e-02]]
+
+V^T =  [[ 0.79610972  0.53478061  0.23529777  0.15765144]
+ [-0.33360603  0.77364243 -0.50626137 -0.18407563]
+ [-0.47792329  0.33762985  0.80860497  0.06126507]
+ [-0.1628056   0.03864172 -0.18572124  0.96825037]]
+\end{lstlisting}
+
+\subsubsection{Iris-Versicolor}
+\begin{lstlisting}
+Iris-Versicolor
+
+R = U*!$\Sigma$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59]
+ [256.64 119.98 184.35]
+ [397.59 184.35 286.5 ]]
+
+U =  [[ 0.76039163  0.64759888 -0.0491961 ]
+ [ 0.35223975 -0.47485674 -0.80649751]
+ [ 0.54564799 -0.59592513  0.58918716]]
+
+*!$\Sigma$!* =  [[9.59570396e+02 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 1.33162776e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 9.57976568e-01]]
+
+V^T =  [[ 0.76039163  0.35223975  0.54564799]
+ [ 0.64759888 -0.47485674 -0.59592513]
+ [-0.0491961  -0.80649751  0.58918716]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[555.38 256.64 397.59  91.  ]
+ [256.64 119.98 184.35  42.2 ]
+ [397.59 184.35 286.5   65.2 ]
+ [ 91.    42.2   65.2   15.  ]]
+
+U =  [[ 0.7545525  -0.64474223 -0.11812875  0.03167953]
+ [ 0.34954066  0.46962259 -0.11526607  0.80248968]
+ [ 0.54144512  0.60234554  0.01367345 -0.58637025]
+ [ 0.1237297  -0.030691    0.98619084  0.1057197 ]]
+
+*!$\Sigma$!* =  [[9.74487597e+02 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 1.33280153e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 7.14132919e-02 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 9.68188359e-01]]
+
+V^T =  [[ 0.7545525   0.34954066  0.54144512  0.1237297 ]
+ [-0.64474223  0.46962259  0.60234554 -0.030691  ]
+ [-0.11812875 -0.11526607  0.01367345  0.98619084]
+ [ 0.03167953  0.80248968 -0.58637025  0.1057197 ]]
+\end{lstlisting}
+
+\subsubsection{Iris-Virginica}
+\begin{lstlisting}
+Iris-Virginica
+
+R = U*!$\Sigma$!*V^(T)
+
+SEM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72]
+ [304.85 138.7  253.94]
+ [562.72 253.94 469.3 ]]
+
+U =  [[ 0.72592866 -0.63483621 -0.2645951 ]
+ [ 0.32772296 -0.01894783  0.94458385]
+ [ 0.60466953  0.77241438 -0.19429563]]
+
+*!$\Sigma$!* =  [[1.28249881e+03 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 5.79253032e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 1.07193335e+00]]
+
+V^T =  [[ 0.72592866  0.32772296  0.60466953]
+ [-0.63483621 -0.01894783  0.77241438]
+ [-0.2645951   0.94458385 -0.19429563]]
+
+
+COM O TERMO INDEPENDENTE: 
+R =  [[676.15 304.85 562.72 100.3 ]
+ [304.85 138.7  253.94  45.4 ]
+ [562.72 253.94 469.3   83.6 ]
+ [100.3   45.4   83.6   15.  ]]
+
+U =  [[ 7.21743001e-01 -2.76297507e-01 -6.34623278e-01 -1.50933128e-04]
+ [ 3.25843186e-01  9.35769444e-01 -3.68031855e-02 -1.29642937e-01]
+ [ 6.01187515e-01 -1.93722166e-01  7.68083597e-01 -1.05322749e-01]
+ [ 1.07176625e-01  1.02308151e-01  7.71129601e-02  9.85951218e-01]]
+
+*!$\Sigma$!* =  [[1.29740071e+03 0.00000000e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 1.08243546e+00 0.00000000e+00 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 5.82311582e-01 0.00000000e+00]
+ [0.00000000e+00 0.00000000e+00 0.00000000e+00 8.45463191e-02]]
+
+V^T =  [[ 7.21743001e-01  3.25843186e-01  6.01187515e-01  1.07176625e-01]
+ [-2.76297507e-01  9.35769444e-01 -1.93722166e-01  1.02308151e-01]
+ [-6.34623278e-01 -3.68031855e-02  7.68083597e-01  7.71129601e-02]
+ [-1.50933128e-04 -1.29642937e-01 -1.05322749e-01  9.85951218e-01]]
+\end{lstlisting}
+
+\section{Questão 4}
+\subsection{Funções utilizadas}
+Para essa parte foram utilizadas as funções: menu, pegarDados, construir\_equacao\_normal, PLU e estimar\_amostras.
+
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal, utilizar o R e p retornados da equação normal para aplicar PLU e backsubstitution para descobrir os coeficientes da equação normal e estimar as amostras fornecidas utilizando os coeficientes achados.
+
+\subsection{Resultados}
+\begin{lstlisting}
+SEM O TERMO INDEPENDENTE: 
+A =  Iris-Versicolor
+B =  Iris-Setosa
+C =  Iris-Setosa
+D =  Iris-Versicolor
+E =  Iris-Virginica
+
+COM O TERMO INDEPENDENTE: 
+A =  Iris-Versicolor
+B =  Iris-Setosa
+C =  Iris-Setosa
+D =  Iris-Versicolor
+E =  Iris-Virginica
+\end{lstlisting}
+
 
 
 

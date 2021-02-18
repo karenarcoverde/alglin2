@@ -17,6 +17,7 @@ def pegarDados(tipo_iris):
     dados = []
     IDs = []
     
+    ## definicao dos ids das especies selecionadas para o trabalho
     Setosa = range(25,39+1)
     Versicolor = range(75,89+1)
     Virginica = range (125,139+1)
@@ -34,7 +35,6 @@ def pegarDados(tipo_iris):
     for i in range(1,46): # percorre todo o banco de dados 1-45
         linha = (arquivo.readline()).split(',') #separa os dados por virgula
     
-        
         if  (int(linha[0]) in IDs):# percorre os ids selecionados
             linha.pop(0) # retira o ID dos dados
             linha.pop(-1) # retira a especie dos dados
@@ -44,6 +44,7 @@ def pegarDados(tipo_iris):
             dados.append(linha) #adiciona na lista de dados
             
     arquivo.close()
+    
     return dados
 
 # ----------------------------------------------------------
@@ -66,7 +67,7 @@ def construir_equacao_normal (dados):
     x = np.array(dados) 
     x = np.delete(x.reshape(15,4),3,1) #deleta a ultima coluna de x
     x_transposta = np.transpose(x) #faz a transposta de x: (x^T)
-    
+       
     #achar R
     R = np.dot(x_transposta,x) #multiplica (x^T) por x
     
@@ -75,16 +76,16 @@ def construir_equacao_normal (dados):
     y = np.delete(y.reshape(15,4),0,1) #deleta a primeira coluna de y
     y = np.delete(y.reshape(15,3),0,1) #deleta a segunda coluna de y
     y = np.delete(y.reshape(15,2),0,1) #deleta a terceira coluna de y
-
+    
     #achar p 
     p = np.dot(x_transposta,y) 
-    
+  
     ###### com termo independente #####
     # y = a*x1 +b*x2 +c*x3 +k
      
     for i in range (0,15):
         dados[i][3] = 1
-    
+        
     #achar (x^T) e x
     x = np.array(dados) 
     x_transposta = np.transpose(x) #faz a transposta de x: (x^T)
@@ -92,7 +93,7 @@ def construir_equacao_normal (dados):
     R1= np.dot(x_transposta,x) #multiplica (x^T) por x
     #achar p 
     p1 = np.dot(x_transposta,y) 
-    
+      
     return R,p,R1,p1
 
 # ----------------------------------------------------------
@@ -161,7 +162,7 @@ def decomposicao_espectral(R):
     autovalores, autovetores = np.linalg.eig(R) 
     # matriz diagonal de autovalores
     matrizDiagonal = np.diag(autovalores) 
-       
+        
     return  autovetores, matrizDiagonal
 
 # ----------------------------------------------------------

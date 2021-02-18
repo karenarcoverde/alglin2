@@ -99,7 +99,6 @@ def construir_equacao_normal (dados):
 # ----------------------------------------------------------
 def PLU(R,p):
     indice_coluna = 0 
-    indice_linha = 1
     indice_L_1s = 0
     tamanho_R = len(R)
     
@@ -111,7 +110,6 @@ def PLU(R,p):
             indice_coluna_aux = indice_coluna + 1
             while (indice_coluna_aux < tamanho_R):
                 L[indice_coluna_aux][indice_coluna] = - R[indice_coluna_aux][indice_coluna]/R[indice_coluna][indice_coluna]
-                indice_linha += 1
                 indice_coluna_aux += 1
             
             while (indice_L_1s < tamanho_R):
@@ -119,8 +117,7 @@ def PLU(R,p):
                 indice_L_1s += 1
             
             indice_L_1s = 0
-            indice_linha = 1
-                 
+                        
             #multiplica a matriz R por L
             R = np.dot (L,R)
             p = np.dot (L,p)

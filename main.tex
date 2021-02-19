@@ -160,13 +160,17 @@ $y= a\cdot x_{1} +b\cdot x_{2}+c\cdot x_{3}$ sem o termo independente. Com o ter
    
    Por fim, para encontrar R, é feita a transposta de x multiplicada por x, formando uma matriz R [3x3] sem o termo independente e [4x4] com o termo independente. Também para encontrar p, é feita a transposta de x multiplicada por y, formando uma matriz [3x1] sem o termo independente e [4x1] com o termo independente. Essa função retornará dois R e p diferentes, sem o termo independente e com o termo independente, que poderá ser utilizada posteriormente para as outras funções.
 \subsubsection{PLU}
-A função \textbf{PLU} tem como objetivo transformar R em uma matriz triangular superior. Primeiro é feito um loop para percorrer cada coluna da matriz R, depois um loop dentro desse para percorrer as linhas de R. Sendo assim, ele fixa uma coluna em R e percorre todas as linhas de R nessa mesma coluna, depois passa para próxima coluna e faz o mesmo loop até terminar as colunas. Durante o loop das colunas, é verificado sempre se o pivô é igual a zero. Caso não seja zero, começa a construir a matriz L (triangular inferior). Caso seja igual a zero, vai para uma condição, para criar a matriz de permutação (P). Cada vez que é construída a matriz L ou P, R e p são multiplicadas por L ou P.
+A função \textbf{PLU} tem como objetivo transformar R em uma matriz triangular superior. Primeiro é feito um loop para percorrer cada coluna da matriz R, depois um loop dentro desse para percorrer as linhas de R. Sendo assim, ele fixa uma coluna em R e percorre todas as linhas de R nessa mesma coluna, depois passa para próxima coluna e faz o mesmo loop das linhas até terminar na penúltima coluna. Então, durante o loop das colunas, é verificado sempre se o pivô, que é o elemento da diagonal principal, é igual a zero. Caso não seja zero, começa a construir a matriz L (triangular inferior). Caso seja igual a zero, vai para uma condição, para criar a matriz de permutação (P). Cada vez que é construída a matriz L ou P, R e p são multiplicadas por L ou P.
 
-A matriz L é construída coluna por coluna, criando uma matriz de zeros chamada L do mesmo tamanho que R. Tomando como pivô os elementos na diagonal principal de R, um loop que percorre as linhas de R e partindo da informação do pivô da coluna atual, coloca-se na matriz L na posição com número da linha igual ao número da coluna do pivô de R+1 e número da coluna do pivô de R: o negativo do valor atual da linha e coluna que está percorrendo o loop em R dividido pelo pivô da coluna analisada em R. Soma-se 1 no loop que percorre as linhas de R e faz o mesmo procedimento até finalizar todas as linhas de R. Depois completa a diagonal principal de L todas com valor 1. Cada vez que o pivô de R é diferente de zero, a matriz L é criada com elementos zeros do mesmo tamanho que a matriz R, até ter percorrido todas as colunas de R. Para a próxima coluna construída de L ou a próxima matriz L, o loop das linhas de R começa no número da linha de R igual ao número da coluna do pivô de R+1 e segue-se o mesmo procedimento para percorrer as linhas de R, somando-se 1 a esse valor de linha de R já estabelecido.
+A matriz L é construída de forma que a cada coluna que o loop das colunas da matriz R percorre, é criada uma matriz L de zeros do mesmo tamanho que R. Desse modo, a matriz L será preenchida de forma que os elementos abaixo do pivô da coluna fixada se tornem zeros na matriz R. Assim, o loop das linhas de R começa sempre do número da coluna fixada de R+1 de modo que o loop das linhas comece sempre na posição abaixo do pivô. E o valor na linha e na coluna que estão sendo analisadas na matriz R será colocado na mesma posição na matriz L, só que dividido pelo valor do pivô da coluna fixada na matriz R e multiplicando essa razão por -1. Depois de percorrer todas as linhas da coluna fixada, a matriz L é preenchida com valor 1 na diagonal principal. Quando for para próxima coluna de R, é criada uma nova matriz L de zeros do mesmo tamanho que R e o loop das linhas se repete. 
 
-A matriz P é construída criando uma matriz de zeros do mesmo tamanho que R. Na matriz R, temos o objetivo de trocar a linha em que o pivô de R tem valor zero pela linha abaixo dela e a linha abaixo do pivô de R pela linha do pivô de R. Dessa forma, na matriz P, o número da linha do pivô de R e da coluna do pivô de R+1 recebe o valor 1. E o número da linha abaixo do pivô de R e com o mesmo número da coluna do pivô de R recebe o valor 1. Depois é feito um loop para percorrer cada linha de P e ver se tem algum elemento 1 na linha, caso já tenha, não é colocado 1. Se não tiver o valor 1 em qualquer elemento da linha, é colocado 1 na linha e coluna iguais ao número da linha analisada, de forma a ter 1 na diagonal principal nas linhas que não foram trocadas. 
+A matriz P é construída criando uma matriz de zeros do mesmo tamanho que R. Na matriz R, temos o objetivo de trocar a linha em que o pivô de R tem valor zero por uma linha em que o valor na mesma coluna do pivô não tenha zero. Desse modo, é feito um loop para percorrer todas as linhas abaixo da coluna do pivô de R e ver qual elemento é diferente de zero. Se for achado o elemento, é feita a construção da matriz P para fazer as trocas das duas linhas e o loop é terminado. 
 
-E assim o loop continua, indo para a próxima coluna da matriz R até ter percorrido todas as colunas. Quando tiver terminado de percorrer todas as colunas, já que a matriz R já terá se tornado triangular superior, é feito o backsubstitution, em que é dado R e p e a função np.linalg.solve retorna w (os coeficientes). 
+Depois é feito um loop para percorrer cada linha de P e ver se tem algum elemento 1 na linha, caso já tenha, não é colocado 1. Se não tiver o valor 1 em qualquer elemento da linha, é colocado 1 na posição com a linha e coluna iguais ao número da linha analisada. 
+
+Posteriormente, o loop das colunas de R volta para essa mesma coluna em que as linhas foram trocadas e ela é novamente analisada para zerar os elementos abaixo do pivô da coluna fixada. Caso não tenha um valor diferente de zero abaixo do pivô nessa coluna, é passada para a próxima coluna da matriz R e ela será novamente analisada.
+
+E assim o loop continua, indo para a próxima coluna da matriz R até ter percorrido a penúltima coluna. Quando tiver terminado de percorrer até a penúltima coluna, a matriz R já terá se tornado triangular superior, é feito o backsubstitution, em que é dado R e p e a função np.linalg.solve retorna w (os coeficientes). 
 
 \subsubsection{decomposicao\_espectral}
    A função \textbf{decomposicao\_espectral} calcula os autovalores e autovetores de R. Posteriormente, retorna uma matriz diagonal de autovalores de R ($\Lambda$) e uma matriz de autovetores de R (matriz V). No menu principal, quando selecionada a opção Questão 2, essa parte chamará a função decomposicao\_espectral duas vezes, uma para calcular as matrizes sem o termo independente e outra com o termo independente. Essa parte usará essas matrizes encontradas e imprimirá R, V, $\Lambda$ e a transposta de V ($V^T$) com e sem o termo independente. 
@@ -290,11 +294,11 @@ def construir_equacao_normal (dados):
 # ----------------------------------------------------------
 def PLU(R,p):
     indice_coluna = 0 
-    indice_linha = 1
     indice_L_1s = 0
+    indice_escolher_linha = 0
     tamanho_R = len(R)
     
-    while (indice_coluna < tamanho_R):
+    while (indice_coluna < (tamanho_R-1)):
         #constroi a matriz L, triangular inferior
         if (R[indice_coluna][indice_coluna] != 0):
             L = np.zeros((tamanho_R, tamanho_R))
@@ -302,7 +306,6 @@ def PLU(R,p):
             indice_coluna_aux = indice_coluna + 1
             while (indice_coluna_aux < tamanho_R):
                 L[indice_coluna_aux][indice_coluna] = - R[indice_coluna_aux][indice_coluna]/R[indice_coluna][indice_coluna]
-                indice_linha += 1
                 indice_coluna_aux += 1
             
             while (indice_L_1s < tamanho_R):
@@ -310,8 +313,7 @@ def PLU(R,p):
                 indice_L_1s += 1
             
             indice_L_1s = 0
-            indice_linha = 1
-                 
+                        
             #multiplica a matriz R por L
             R = np.dot (L,R)
             p = np.dot (L,p)
@@ -320,9 +322,17 @@ def PLU(R,p):
         #se o pivo for zero, necessario multiplicar por uma matriz P de permutacao
         if (R[indice_coluna][indice_coluna] == 0):
             P = np.zeros((tamanho_R, tamanho_R))
-            P[indice_coluna][indice_coluna + 1] = 1
-            P[indice_coluna + 1][indice_coluna] = 1
-            
+            indice_escolher_linha = indice_coluna + 1
+            while (indice_escolher_linha < tamanho_R):
+                if (R[indice_escolher_linha][indice_coluna] != 0):
+                    P[indice_coluna][indice_escolher_linha] = 1
+                    P[indice_escolher_linha][indice_coluna] = 1
+                    
+                    indice_coluna -= 1
+                    break
+                
+                indice_escolher_linha += 1
+                      
             i = 0
             j = 0
             guarda_1 = False
@@ -337,6 +347,7 @@ def PLU(R,p):
             
             R = np.dot(P,R)
             p = np.dot (P,p)
+            
        
         indice_coluna += 1 
     
@@ -697,6 +708,7 @@ def menu():
                        
 ######## chamada ao menu
 menu()
+
 \end{lstlisting}
 
 \section{Questão 1}
@@ -749,7 +761,7 @@ y = a*x1 + b*x2 + c*x3 + k
 \subsection{Funções utilizadas}
 Para essa parte foram utilizadas as funções: menu, pegarDados, construir\_equacao\_normal e decomposicao\_espectral.
 
-Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal, utilizar o R retornado da equação normal para fazer a decomposição espectral.
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal e utilizar o R retornado da equação normal para fazer a decomposição espectral.
 \subsection{Resultados}
 \subsubsection {Iris-Setosa}
 
@@ -898,7 +910,7 @@ V^T =  [[-7.21743001e-01 -3.25843186e-01 -6.01187515e-01 -1.07176625e-01]
 \subsection{Funções utilizadas}
     Para essa parte foram utilizadas as funções: menu, PegarDados, construir\_equacao\_normal e construir\_svd.
     
-Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal, utilizar o R retornado da equação normal para fazer o SVD.
+Foi preciso pegar os dados do arquivo fornecido, depois descobrir a equação normal e utilizar o R retornado da equação normal para fazer o SVD.
 
 \subsection{Resultados}
 \subsubsection{Iris-Setosa}

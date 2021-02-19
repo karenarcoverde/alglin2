@@ -100,9 +100,10 @@ def construir_equacao_normal (dados):
 def PLU(R,p):
     indice_coluna = 0 
     indice_L_1s = 0
+    indice_escolher_linha = 0
     tamanho_R = len(R)
     
-    while (indice_coluna < tamanho_R):
+    while (indice_coluna < (tamanho_R-1)):
         #constroi a matriz L, triangular inferior
         if (R[indice_coluna][indice_coluna] != 0):
             L = np.zeros((tamanho_R, tamanho_R))
@@ -126,9 +127,17 @@ def PLU(R,p):
         #se o pivo for zero, necessario multiplicar por uma matriz P de permutacao
         if (R[indice_coluna][indice_coluna] == 0):
             P = np.zeros((tamanho_R, tamanho_R))
-            P[indice_coluna][indice_coluna + 1] = 1
-            P[indice_coluna + 1][indice_coluna] = 1
-            
+            indice_escolher_linha = indice_coluna + 1
+            while (indice_escolher_linha < tamanho_R):
+                if (R[indice_escolher_linha][indice_coluna] != 0):
+                    P[indice_coluna][indice_escolher_linha] = 1
+                    P[indice_escolher_linha][indice_coluna] = 1
+                    
+                    indice_coluna -= 1
+                    break
+                
+                indice_escolher_linha += 1
+                      
             i = 0
             j = 0
             guarda_1 = False
@@ -143,6 +152,7 @@ def PLU(R,p):
             
             R = np.dot(P,R)
             p = np.dot (P,p)
+            
        
         indice_coluna += 1 
     

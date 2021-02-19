@@ -168,7 +168,7 @@ A matriz P é construída criando uma matriz de zeros do mesmo tamanho que R. Na
 
 Depois é feito um loop para percorrer cada linha de P e ver se tem algum elemento 1 na linha, caso já tenha, não é colocado 1. Se não tiver o valor 1 em qualquer elemento da linha, é colocado 1 na posição com a linha e coluna iguais ao número da linha analisada. 
 
-Posteriormente, o loop das colunas de R volta para essa mesma coluna em que as linhas foram trocadas e ela é novamente analisada para zerar os elementos abaixo do pivô da coluna fixada. Caso não tenha um valor diferente de zero abaixo do pivô nessa coluna, é passada para a próxima coluna da matriz R e ela será novamente analisada.
+Posteriormente, o loop das colunas de R volta para essa mesma coluna em que as linhas foram trocadas e ela é novamente analisada para zerar os elementos abaixo do pivô da coluna fixada. Caso não tenha um valor diferente de zero abaixo do pivô nessa coluna, é passada para a próxima coluna da matriz R e ela passará pelo mesmo processo de análise.
 
 E assim o loop continua, indo para a próxima coluna da matriz R até ter percorrido a penúltima coluna. Quando tiver terminado de percorrer até a penúltima coluna, a matriz R já terá se tornado triangular superior, é feito o backsubstitution, em que é dado R e p e a função np.linalg.solve retorna w (os coeficientes). 
 

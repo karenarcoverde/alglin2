@@ -187,7 +187,7 @@ Assim, essa função calcula os autovalores e autovetores (matriz U) de $R\cdot 
 \subsubsection{estimar\_amostras}
 A função \textbf{estimar\_amostras} terá o propósito de fazer o produto interno do vetor de amostra selecionado, excluindo a coluna PetalWidthCm, com cada vetor de coeficientes da Iris-Setosa, Iris-Versicolor e Iris-Virginica. Caso seja com o termo independente, terá mais um valor no vetor de amostra selecionado, com o número 1. Uma vez que a coluna PetalWidthCm será a selecionada para estimar a classe da Iris. 
 
-Depois de fazer o produto interno, será calculada a diferença (erro) do resultado de cada produto interno com o valor da PetalWidthCm de da amostra e colocada numa lista que posteriormente será percorrida para cada erro ser transformado em seu módulo. 
+Depois de fazer o produto interno, será calculada a diferença (erro) do resultado de cada produto interno com o valor da PetalWidthCm da amostra e colocada numa lista que posteriormente será percorrida para cada erro ser transformado em seu módulo. 
 
 Por fim, é usada uma função que pega o menor valor dessa lista. Esse menor valor da lista é comparado com o módulo de cada erro da Iris-Setosa, Iris-Versicolor e Iris-Virginica, quando a comparação der igual, é retornada uma string com o tipo de Iris que deu igual. Por exemplo, se a comparação deu igual na Iris-Virginica, retornará uma string "Iris-Virginica".
 
